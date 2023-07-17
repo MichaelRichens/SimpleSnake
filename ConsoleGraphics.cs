@@ -143,7 +143,7 @@ namespace SimpleSnake
 		public MainMenuOption MainMenu()
 		{
 			Console.Clear();
-			return DisplayMenuFromEnum<MainMenuOption>(TextStrings.MainMenu);
+			return MenuFromEnum<MainMenuOption>(TextStrings.MainMenu);
 		}
 
 		/// <summary>
@@ -154,7 +154,7 @@ namespace SimpleSnake
 		/// <returns>The chosen option - a value of the enum type passed in.</returns>
 		/// <exception cref="ArgumentException">If there are no values in the enum, or if the number of values in the enum does not match the size of the textLookup dictionary.</exception>
 		/// <exception cref="NotImplementedException">Enums with more than 9 values are not handled.</exception>
-		private static TEnum DisplayMenuFromEnum<TEnum>(Dictionary<TEnum, string> textLookup) where TEnum : struct, Enum
+		private static TEnum MenuFromEnum<TEnum>(Dictionary<TEnum, string> textLookup) where TEnum : struct, Enum
 		{
 			TEnum[] values = Enum.GetValues<TEnum>().ToArray();
 
