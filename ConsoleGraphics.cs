@@ -8,9 +8,11 @@ namespace SimpleSnake
 {
 	public class ConsoleGraphics : IGraphicsOutput
 	{
-		// Console settings - might make some of these user configurable.
-		private static readonly char emptyCellChar = ' ';
+		// Console settings - might make some of these user configurable.		
 		private static readonly char wallChar = '█';
+		// emptyCellChar being a space is assumed by the Draw method - initial draw is performed only on cells which differ from empty space, so just chaniging the char here will only effect cells which get changed to Empty during a game.
+		// Easiest way to fix this would be to have InitBoard actually draw out the board in empty cells as well as populate the prevCells array.  But this is skipped since the space char is currently used.
+		private static readonly char emptyCellChar = ' ';
 		private static readonly char snakeSegmentChar = '█';
 		private static readonly char pillChar = '@';
 		private static readonly ConsoleColor backgroundColour = ConsoleColor.Black;
@@ -38,7 +40,7 @@ namespace SimpleSnake
 		/// </summary>
 		private Cell[,] prevCells;
 
-		public ConsoleGraphics(int initialWidth, int initialHeight)
+		public ConsoleGraphics()
 		{
 			Console.CursorVisible = false;
 
@@ -46,7 +48,8 @@ namespace SimpleSnake
 			initialBackgroundColour = Console.BackgroundColor;
 			initialForegroundColour = Console.ForegroundColor;
 
-			prevCells = new Cell[initialWidth, initialHeight];
+			// Put an empty array in prevCells to avoid it being null.
+			prevCells = new Cell[0, 0];
 
 			Console.BackgroundColor = backgroundColour;
 		}
@@ -126,8 +129,13 @@ namespace SimpleSnake
 		/// <summary>
 		/// Prepares the console ready for the board to be drawn for the first time.
 		/// </summary>
-		public void InitBoard()
+		/// <param name="width">The width of the board in cells</param>
+		/// <param name="height">The height of the board in cells.</param>
+		public void InitBoard(int width, int height)
 		{
+			// Create a prevCells array populated by Empty cells ready for the first call of the Draw method.
+			prevCells = new Cell[width, height];
+
 			Console.Clear();
 			Console.WriteLine(TextStrings.ConsoleBoardHeading(Settings.pauseKey, Settings.quitKey));
 			Console.WriteLine();

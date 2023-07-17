@@ -6,28 +6,39 @@ using System.Threading.Tasks;
 
 namespace SimpleSnake
 {
-	/// <summary>
-	/// IGraphicsOutput controls iteraction with the graphics display, and is implemented by classes that are injected into the application to run it in different graphical environments
-	/// </summary>
-	internal interface IGraphicsOutput
+	class WinFormsGraphics : IGraphicsOutput
 	{
+		internal WinFormsGraphics()
+		{
+
+		}
+
 		/// <summary>
 		/// The DrawBoard method is passed a 2D cells array, and displays it to the user.
 		/// </summary>
 		/// <param name="cells"></param>
-		internal void DrawBoard(Cell[,] cells);
+		public void DrawBoard(Cell[,] cells)
+		{
+			throw new NotImplementedException("DrawBoard");
+		}
 
 		/// <summary>
 		/// Does any start of game housekeeping needed before the board is first drawn (eg clearing the screen).
 		/// </summary>
 		/// <param name="width">The width of the board in cells</param>
 		/// <param name="height">The height of the board in cells.</param>
-		internal void InitBoard(int width, int height);
+		public void InitBoard(int width, int height)
+		{
+			throw new NotImplementedException("InitBoard");
+		}
 
 		/// <summary>
 		/// Presents the main game menu to the player, and returns their choice.
 		/// </summary>
 		/// <returns>The choice made by the player.</returns>
-		internal MainMenuOption MainMenu();
+		public MainMenuOption MainMenu()
+		{
+			throw new NotImplementedException("MainMenu");
+		}
 	}
 }

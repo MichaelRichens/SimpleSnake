@@ -4,15 +4,18 @@ namespace SimpleSnake
 {
 	class Program
 	{
-		static void Main()
+		static void Main(string[] args)
 		{
-			int delay = Settings.defaultDelay;
-			int width = Settings.defaultWidth;
-			int height = Settings.defaultHeight;
-			int startingLength = Settings.startingLength;
-			Direction startingDirection = Settings.startingDirection;
+			bool useWinForms = false;
+			foreach (string arg in args)
+			{
+				if (arg == "wf")
+				{
+					useWinForms = true;
+				}
+			}
 
-			IGraphicsOutput graphicsOutput = new ConsoleGraphics(width, height);
+			IGraphicsOutput graphicsOutput = useWinForms ? new WinFormsGraphics() : new ConsoleGraphics();
 
 			MainMenuOption choice;
 
@@ -21,7 +24,7 @@ namespace SimpleSnake
 				choice = graphicsOutput.MainMenu();
 				if (choice == MainMenuOption.Play)
 				{
-					var game = new SnakeGame(width, height, startingLength, startingDirection, delay, graphicsOutput);
+					var game = new SnakeGame(Settings.defaultWidth, Settings.defaultHeight, Settings.startingLength, Settings.startingDirection, Settings.defaultDelay, graphicsOutput);
 					game.Play();
 				}
 			} while (choice != MainMenuOption.Quit);

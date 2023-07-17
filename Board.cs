@@ -129,7 +129,7 @@ namespace SimpleSnake
 		/// </summary>
 		internal void InitBoard()
 		{
-			graphicsOutput.InitBoard();
+			graphicsOutput.InitBoard(Width, Height);
 		}
 
 		/// <summary>
