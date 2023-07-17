@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SimpleSnake
 {
 	/// <summary>
-	/// The Snake class represents the snake itself, and handles its head position and direction.
+	/// The Snake class represents the snake itself and holds information about it. Specifically about its head - the rest of its body is considered part of the board and is handled by the game's <see cref="Board" /> instance.
 	/// </summary>
 	class Snake
 	{

@@ -13,7 +13,7 @@ namespace SimpleSnake
 	class SnakeGame
 	{
 		/// <summary>
-		/// This field holds information about the snake.
+		/// This field references the <see cref="Snake" /> instance which holds information about the snake.
 		/// </summary>
 		internal readonly Snake snake;
 
