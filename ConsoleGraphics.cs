@@ -159,12 +159,12 @@ namespace SimpleSnake
 				throw new ArgumentException($"The textLookup dictionary does not contain the same number of entries as there are values in the {typeof(T).Name} enum");
 			}
 
-			Dictionary<int, T> options = new();
+			Dictionary<char, T> options = new();
 			char playerChoice = '\0';
 
 			while (playerChoice < '1' || playerChoice >= '1' + values.Length)
 			{
-				int optionNum = 1;
+				char optionNum = '1';
 				foreach (T option in values)
 				{
 					options[optionNum] = option;
@@ -174,7 +174,7 @@ namespace SimpleSnake
 				playerChoice = Console.ReadKey().KeyChar;
 			}
 
-			return options[playerChoice - '0'];
+			return options[playerChoice];
 		}
 
 
