@@ -53,7 +53,7 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// Method that creates a new cell from the existing one by decreasing its timer by 1, and changing it to an Empty type if the timer was previously equal to 1.  cells with timer == 0 (Empty, Walls) return themselves.
+		/// Method that creates a new cell from the existing one by decreasing its timer by 1, and changing it to an Empty type if the timer was previously equal to 1.  cells with timer == 0 (Empty, Walls) return unchanged.
 		/// </summary>
 		/// <returns>The new Cell struct.</returns>
 		internal Cell DecTimer()
