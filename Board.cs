@@ -43,10 +43,10 @@ namespace SimpleSnake
 		/// <summary>
 		/// Creates a new instance of the Board class, representing the Snake game board.
 		/// </summary>
-		/// <param name="width">The width of the board in tiles (locations that can be occupied).</param>
-		/// <param name="height">The height of the board in tiles (locations that can be occupied).</param>
-		/// <param name="snakeStartX">The horizontal tile to start the snake (measured from the left).</param>
-		/// <param name="snakeStartY">The vertical tile to start the snake (measured from the top).</param>
+		/// <param name="width">The width of the board in cells (locations that can be occupied).</param>
+		/// <param name="height">The height of the board in cells (locations that can be occupied).</param>
+		/// <param name="snakeStartX">The horizontal cell to start the snake (measured from the left).</param>
+		/// <param name="snakeStartY">The vertical cell to start the snake (measured from the top).</param>
 		/// <param name="snakeLength">The starting length of the snake.</param>
 		/// <param name="graphicsOutput">Provide an IGraphicsOutput implementor to display the graphics.</param>
 		internal Board(int width, int height, int snakeStartX, int snakeStartY, int snakeLength, IGraphicsOutput graphicsOutput)
@@ -83,10 +83,10 @@ namespace SimpleSnake
 		internal CellType PlaceSnakeHead(Snake snake)
 		{
 
-			CellType tileType = cells[snake.HeadY, snake.HeadX].cellType;
+			CellType cellType = cells[snake.HeadY, snake.HeadX].cellType;
 			cells[snake.HeadY, snake.HeadX] = new Cell(CellType.SnakeSegment, snake.length);
 
-			return tileType;
+			return cellType;
 		}
 
 		/// <summary>

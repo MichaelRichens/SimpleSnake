@@ -40,7 +40,7 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// Updates the <see cref="HeadX" /> and <see cref="HeadY" /> properties to represent a move of 1 tile in the direction specified by <see cref="direction" />.
+		/// Updates the <see cref="HeadX" /> and <see cref="HeadY" /> properties to represent a move of 1 cell in the direction specified by <see cref="direction" />.
 		/// </summary>		
 		internal void AdvanceHead()
 		{
