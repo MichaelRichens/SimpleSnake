@@ -35,8 +35,8 @@ namespace SimpleSnake
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SnakeGame"/> class.
 		/// </summary>
-		/// <param name="width">The width of the game board in characters.</param>
-		/// <param name="height">The height of the game board in charcters.</param>
+		/// <param name="width">The width of the game board in tiles.</param>
+		/// <param name="height">The height of the game board in tiles.</param>
 		/// <param name="delay">The delay between game updates in ms.</param>
 		/// <param name="graphicsOutput">Provide an IGraphicsOutput implementor to display the graphics.</param>
 		internal SnakeGame(int width, int height, int startingLength, Direction startingDirection, int delay, IGraphicsOutput graphicsOutput)
