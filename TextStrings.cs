@@ -11,6 +11,8 @@ namespace SimpleSnake
 	/// </summary>
 	static class TextStrings
 	{
+		internal static string ConsoleBoardHeading(ConsoleKey pauseKey, ConsoleKey quitKey) => $"Press {pauseKey} to pause, press {quitKey} to quit.";
+
 		internal static Dictionary<MainMenuOption, string> MainMenu = new() {
 			{ MainMenuOption.Play, "Start Game" },
 			{ MainMenuOption.Quit, "Exit Game" },

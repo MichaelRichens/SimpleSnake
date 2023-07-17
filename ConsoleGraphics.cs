@@ -17,6 +17,11 @@ namespace SimpleSnake
 		private static readonly ConsoleColor snakeColour = ConsoleColor.Green;
 
 		/// <summary>
+		/// Holds the cursor position that the board is drawn relative to.  Value set by <see cref="InitBoard" />.
+		/// </summary>
+		private (int x, int y) gameOriginCursor;
+
+		/// <summary>
 		/// Holds the console background colour set when the instance was created.
 		/// </summary>
 		private readonly ConsoleColor initialBackgroundColour;
@@ -97,7 +102,7 @@ namespace SimpleSnake
 				{
 					if (cells[i, j].cellType != prevCells[i, j].cellType)
 					{
-						Console.SetCursorPosition(j, i);
+						Console.SetCursorPosition(gameOriginCursor.x + j, gameOriginCursor.y + i);
 						Console.ForegroundColor = GetCellColour(cells[i, j].cellType);
 						Console.WriteLine(GetCellChar(cells[i, j].cellType));
 					}
@@ -111,15 +116,20 @@ namespace SimpleSnake
 			// Leave the console colours in their default state, with the cursor at the end of the output (so if we exit and display some text it appears correctly).
 			Console.BackgroundColor = initialBackgroundColour;
 			Console.ForegroundColor = initialForegroundColour;
-			Console.SetCursorPosition(0, height - 1);
+			Console.SetCursorPosition(0, gameOriginCursor.y + height - 1);
 		}
 
 		/// <summary>
-		/// Clears the console reasy for the board to be drawn for the first time.
+		/// Prepares the console ready for the board to be drawn for the first time.
 		/// </summary>
 		public void InitBoard()
 		{
 			Console.Clear();
+			Console.WriteLine(TextStrings.ConsoleBoardHeading(Settings.pauseKey, Settings.quitKey));
+			Console.WriteLine();
+
+			// Store where the cursor is so that the game can be drawn below it (and to the right of it if we want a side menu).
+			gameOriginCursor = (x: Console.CursorLeft, y: Console.CursorTop);
 		}
 
 		/// <summary>
@@ -171,7 +181,7 @@ namespace SimpleSnake
 					Console.WriteLine($"{optionNum}. {textLookup[option]}");
 					optionNum++;
 				}
-				playerChoice = Console.ReadKey().KeyChar;
+				playerChoice = Console.ReadKey(true).KeyChar;
 			}
 
 			return options[playerChoice];
