@@ -150,11 +150,11 @@ namespace SimpleSnake
 		/// A utility function for displaying a Console menu to the player, getting a choice from all the options in the enum type parameter that is passed.  Text for the options is passed in as a dictionary.
 		/// </summary>
 		/// <typeparam name="TEnum">The enum representing the options to be presented to the player.</typeparam>
-		/// <param name="textLookup">A dictionary containing each of these options as a key, with the value being a string with the text to display.</param>
+		/// <param name="enumTextLookup">A dictionary containing each of these options as a key, with the value being a string with the text to display.</param>
 		/// <returns>The chosen option - a value of the enum type passed in.</returns>
-		/// <exception cref="ArgumentException">If there are no values in the enum, or if the number of values in the enum does not match the size of the textLookup dictionary.</exception>
+		/// <exception cref="ArgumentException">If there are no values in the enum, or if the number of values in the enum does not match the size of the enumTextLookup dictionary.</exception>
 		/// <exception cref="NotImplementedException">Enums with more than 9 values are not handled.</exception>
-		private static TEnum MenuFromEnum<TEnum>(Dictionary<TEnum, string> textLookup) where TEnum : struct, Enum
+		private static TEnum MenuFromEnum<TEnum>(Dictionary<TEnum, string> enumTextLookup) where TEnum : struct, Enum
 		{
 			TEnum[] values = Enum.GetValues<TEnum>().ToArray();
 
@@ -168,9 +168,9 @@ namespace SimpleSnake
 				throw new NotImplementedException($"Enum {typeof(TEnum).Name} has more than 9 values - this method only supports options from `1` to `9`. It could easily be expanded to offer alphabetic options as well.");
 			}
 
-			if (values.Length != textLookup.Count)
+			if (values.Length != enumTextLookup.Count)
 			{
-				throw new ArgumentException($"The textLookup dictionary does not contain the same number of entries as there are values in the {typeof(TEnum).Name} enum");
+				throw new ArgumentException($"The enumTextLookup dictionary does not contain the same number of entries as there are values in the {typeof(TEnum).Name} enum");
 			}
 
 			// Dictionary to store keypress assigned to choose menu option to that option.
@@ -181,7 +181,7 @@ namespace SimpleSnake
 			foreach (TEnum option in values)
 			{
 				options[optionNum] = option;
-				Console.WriteLine($"{optionNum}. {textLookup[option]}");
+				Console.WriteLine($"{optionNum}. {enumTextLookup[option]}");
 				optionNum++;
 			}
 
