@@ -24,5 +24,6 @@ namespace SimpleSnake
 		internal static readonly Direction startingDirection = Direction.Right;
 		internal static readonly int startingLength = 20;
 
+		internal static readonly int pillGrowAmount = 10;
 	}
 }

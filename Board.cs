@@ -31,6 +31,11 @@ namespace SimpleSnake
 		private readonly IGraphicsOutput graphicsOutput;
 
 		/// <summary>
+		/// Random number generator.
+		/// </summary>
+		private readonly Random rng = new();
+
+		/// <summary>
 		/// The height of the board in characters
 		/// </summary>
 		internal int Height { get; }
@@ -97,12 +102,50 @@ namespace SimpleSnake
 			graphicsOutput.DrawBoard(cells);
 		}
 
+		internal void ChangeSnakeLength(int amount)
+		{
+			for (int i = 0; i < Height; i++)
+			{
+				for (int j = 0; j < Width; j++)
+				{
+					if (cells[i, j].cellType == CellType.SnakeSegment)
+					{
+						int newTimer = cells[i, j].timer + amount;
+						if (amount > 0)
+						{
+							cells[i, j] = new Cell(CellType.SnakeSegment, newTimer);
+						}
+						else
+						{
+							cells[i, j] = new Cell();
+						}
+					}
+				}
+			}
+		}
+
 		/// <summary>
 		/// Prepares the graphics output ready for the board to first be drawn.
 		/// </summary>
 		internal void InitBoard()
 		{
 			graphicsOutput.InitBoard();
+		}
+
+		/// <summary>
+		/// Changes a random empty tile on the board to be a pill.
+		/// </summary>
+		internal void PlacePillAtRandomEmpty()
+		{
+			int x;
+			int y;
+			do
+			{
+				x = rng.Next(1, Width - 1);
+				y = rng.Next(1, Height - 1);
+			} while (cells[y, x].cellType != CellType.Empty);
+
+			cells[y, x] = new Cell(CellType.GrowPill, 0);
 		}
 
 		/// <summary>

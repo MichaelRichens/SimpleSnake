@@ -62,6 +62,8 @@ namespace SimpleSnake
 			// Timer for keeping track of how long each loop iteration has taken (for a consistent game speed).
 			var loopTimer = new Stopwatch();
 
+			board.PlacePillAtRandomEmpty();
+
 			//****************
 			// Main Game Loop.
 			while (!endGame)
@@ -104,13 +106,27 @@ namespace SimpleSnake
 				snake.AdvanceHead();
 				CellType cellUnderHead = board.PlaceSnakeHead(snake);
 
-				// Check if this move has killed the snake.
+				// Check if entering this cell has killed the snake.
 				if (DoesCollisionWithKill(cellUnderHead))
 				{
 					endGame = true;
 				}
 
-				// Remove any cells with expired timers from the board (the snake's tail, or any pills that have reached their expiry time).								
+				// Check if entering this cell has changed the snake length
+				int lengthChange = LengthChangeFromCell(cellUnderHead);
+				if (lengthChange != 0)
+				{
+					snake.length += lengthChange;
+					board.ChangeSnakeLength(lengthChange);
+				}
+
+				// If a pill has just been eaten, make a new one.
+				if (cellUnderHead == CellType.GrowPill)
+				{
+					board.PlacePillAtRandomEmpty();
+				}
+
+				// Decrease all cells with timers, and remove any cells with expired timers from the board.
 				board.TickDownTimers();
 
 				// If the loop has taken less time to execute than the value of `Delay`, wait for the additional time.
@@ -175,6 +191,16 @@ namespace SimpleSnake
 
 			_ => false,
 		};
+
+		private static int LengthChangeFromCell(CellType cellType)
+		{
+			if (cellType == CellType.GrowPill)
+			{
+				return Settings.pillGrowAmount;
+			}
+
+			return 0;
+		}
 
 		/// <summary>
 		/// This method returns attempts to read a new player action from the keyboard, returning true or false based on its success, with the new action as a out parameter.

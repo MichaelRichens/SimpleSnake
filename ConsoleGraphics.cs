@@ -12,9 +12,11 @@ namespace SimpleSnake
 		private static readonly char emptyCellChar = ' ';
 		private static readonly char wallChar = '█';
 		private static readonly char snakeSegmentChar = '█';
+		private static readonly char pillChar = '@';
 		private static readonly ConsoleColor backgroundColour = ConsoleColor.Black;
 		private static readonly ConsoleColor sceneryColour = ConsoleColor.White;
-		private static readonly ConsoleColor snakeColour = ConsoleColor.Green;
+		private static readonly ConsoleColor snakeColour = ConsoleColor.Blue;
+		private static readonly ConsoleColor pillColour = ConsoleColor.Yellow;
 
 		/// <summary>
 		/// Holds the cursor position that the board is drawn relative to.  Value set by <see cref="InitBoard" />.
@@ -60,6 +62,7 @@ namespace SimpleSnake
 			CellType.Empty => emptyCellChar,
 			CellType.Wall => wallChar,
 			CellType.SnakeSegment => snakeSegmentChar,
+			CellType.GrowPill => pillChar,
 
 			_ => throw new NotImplementedException($"No case found for {cellType}")
 		};
@@ -74,6 +77,7 @@ namespace SimpleSnake
 		{
 			CellType.Wall or CellType.Empty => sceneryColour,
 			CellType.SnakeSegment => snakeColour,
+			CellType.GrowPill => pillColour,
 
 			_ => throw new NotImplementedException($"No case found for {cellType}")
 		};
