@@ -174,17 +174,19 @@ namespace SimpleSnake
 			}
 
 			Dictionary<char, T> options = new();
+
+			char optionNum = '1';
+			foreach (T option in values)
+			{
+				options[optionNum] = option;
+				Console.WriteLine($"{optionNum}. {textLookup[option]}");
+				optionNum++;
+			}
+
 			char playerChoice = '\0';
 
 			while (playerChoice < '1' || playerChoice >= '1' + values.Length)
 			{
-				char optionNum = '1';
-				foreach (T option in values)
-				{
-					options[optionNum] = option;
-					Console.WriteLine($"{optionNum}. {textLookup[option]}");
-					optionNum++;
-				}
 				playerChoice = Console.ReadKey(true).KeyChar;
 			}
 
