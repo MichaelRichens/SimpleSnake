@@ -173,8 +173,10 @@ namespace SimpleSnake
 				throw new ArgumentException($"The textLookup dictionary does not contain the same number of entries as there are values in the {typeof(T).Name} enum");
 			}
 
+			// Dictionary to store keypress assigned to choose menu option to that option.
 			Dictionary<char, T> options = new();
 
+			// Output menu, and populate the options dictionary.
 			char optionNum = '1';
 			foreach (T option in values)
 			{
@@ -183,8 +185,8 @@ namespace SimpleSnake
 				optionNum++;
 			}
 
+			// Loop on ReadKey until a valid option key is entered.
 			char playerChoice = '\0';
-
 			while (playerChoice < '1' || playerChoice >= '1' + values.Length)
 			{
 				playerChoice = Console.ReadKey(true).KeyChar;
