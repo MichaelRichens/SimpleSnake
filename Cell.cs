@@ -8,7 +8,7 @@ namespace SimpleSnake
 {
 	/// <summary>
 	/// The Cell struct is an immutable struct representing the contents of an individual location of a <see cref="Board" /> Board instance.  It holds an enum for the type of cell (Empty, Wall, SnakeSegment, etc.) it is, and if relevant a timer containing how many game update ticks it will remain there for before reverting to being Empty.
-	/// An Empty or Wall type of cell has no timer, all other types have a timer and will revert to Empty
+	/// Timer == 0 indicates a permanent cell with no timer, all other types have a timer and will revert to Empty when it expires.
 	/// </summary>
 	public readonly struct Cell
 	{
