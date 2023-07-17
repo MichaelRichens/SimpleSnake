@@ -19,12 +19,12 @@ namespace SimpleSnake
 		/// <summary>
 		/// Holds the console background colour set when the instance was created.
 		/// </summary>
-		private ConsoleColor initialBackgroundColour;
+		private readonly ConsoleColor initialBackgroundColour;
 
 		/// <summary>
 		/// Holds the console foreground colour set when the instance was created.
 		/// </summary>
-		private ConsoleColor initialForegroundColour;
+		private readonly ConsoleColor initialForegroundColour;
 
 		/// <summary>
 		/// prevCells is used to store a copy of the cells array from the previous loop iteration.  The Draw method uses this to calculate which cells have changed and need to be redrawn.  The Draw method makes the copy once it has finished updating the console.
