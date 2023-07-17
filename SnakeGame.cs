@@ -201,34 +201,19 @@ namespace SimpleSnake
 			// Loop through keypressBuffer backwards, and return on the first valid key we find.
 			foreach (var keyInfo in keypressBuffer.Reverse<ConsoleKeyInfo>())
 			{
-				if (keyInfo.Key == Settings.upKey)
+				action = keyInfo.Key switch
 				{
-					action = PlayerAction.Up;
-					return true;
-				}
-				else if (keyInfo.Key == Settings.downKey)
+					var k when k == Settings.upKey => PlayerAction.Up,
+					var k when k == Settings.downKey => PlayerAction.Down,
+					var k when k == Settings.leftKey => PlayerAction.Left,
+					var k when k == Settings.rightKey => PlayerAction.Right,
+					var k when k == Settings.pauseKey => PlayerAction.Pause,
+					var k when k == Settings.quitKey => PlayerAction.Quit,
+					_ => PlayerAction.None
+				};
+
+				if (action != PlayerAction.None)
 				{
-					action = PlayerAction.Down;
-					return true;
-				}
-				else if (keyInfo.Key == Settings.leftKey)
-				{
-					action = PlayerAction.Left;
-					return true;
-				}
-				else if (keyInfo.Key == Settings.rightKey)
-				{
-					action = PlayerAction.Right;
-					return true;
-				}
-				else if (keyInfo.Key == Settings.pauseKey)
-				{
-					action = PlayerAction.Pause;
-					return true;
-				}
-				else if (keyInfo.Key == Settings.quitKey)
-				{
-					action = PlayerAction.Quit;
 					return true;
 				}
 			}
