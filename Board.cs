@@ -76,28 +76,6 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// Runs a game time tick on every cell in the board - replaces any cells which have expired with empty cells.
-		/// </summary>
-		internal void TickDownTimers()
-		{
-			for (int i = 0; i < Height; i++)
-			{
-				for (int j = 0; j < Width; j++)
-				{
-					cells[i, j] = cells[i, j].DecTimer();
-				}
-			}
-		}
-
-		/// <summary>
-		/// Draws the current state of the board using the IGraphicsOutput instance that was injected at construction.
-		/// </summary>
-		internal void Draw()
-		{
-			graphicsOutput.DrawBoard(cells);
-		}
-
-		/// <summary>
 		/// Place's the snakes head in the board at the position held in the passed Snake instance, and returns the previous CellType of the cell where it was placed.
 		/// </summary>
 		/// <param name="snake">The snake instance holding the snakes current stats, including the new poistion of its head.  This object is not modified.</param>
@@ -109,6 +87,36 @@ namespace SimpleSnake
 			cells[snake.HeadY, snake.HeadX] = new Cell(CellType.SnakeSegment, snake.length);
 
 			return tileType;
+		}
+
+		/// <summary>
+		/// Draws the current state of the board using the IGraphicsOutput instance that was injected at construction.
+		/// </summary>
+		internal void Draw()
+		{
+			graphicsOutput.DrawBoard(cells);
+		}
+
+		/// <summary>
+		/// Prepares the graphics output ready for the board to first be drawn.
+		/// </summary>
+		internal void InitBoard()
+		{
+			graphicsOutput.InitBoard();
+		}
+
+		/// <summary>
+		/// Runs a game time tick on every cell in the board - replaces any cells which have expired with empty cells.
+		/// </summary>
+		internal void TickDownTimers()
+		{
+			for (int i = 0; i < Height; i++)
+			{
+				for (int j = 0; j < Width; j++)
+				{
+					cells[i, j] = cells[i, j].DecTimer();
+				}
+			}
 		}
 	}
 }

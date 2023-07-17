@@ -53,6 +53,9 @@ namespace SimpleSnake
 		/// </summary>
 		internal void Play()
 		{
+			// Prep the board
+			board.InitBoard();
+
 			// Main loop control flag.
 			bool endGame = false;
 

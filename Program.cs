@@ -14,9 +14,17 @@ namespace SimpleSnake
 
 			IGraphicsOutput graphicsOutput = new ConsoleGraphics(width, height);
 
-			var game = new SnakeGame(width, height, startingLength, startingDirection, delay, graphicsOutput);
+			MainMenuOption choice;
 
-			game.Play();
+			do
+			{
+				choice = graphicsOutput.MainMenu();
+				if (choice == MainMenuOption.Play)
+				{
+					var game = new SnakeGame(width, height, startingLength, startingDirection, delay, graphicsOutput);
+					game.Play();
+				}
+			} while (choice != MainMenuOption.Quit);
 		}
 	}
 }
