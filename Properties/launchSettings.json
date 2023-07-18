@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "SimpleSnake - Console": {
+      "commandName": "Project"
+    },
+    "SimpleSnake - Windowed": {
+      "commandName": "Project",
+      "commandLineArgs": "wd"
+    }
+  }
+}

@@ -6,16 +6,16 @@ namespace SimpleSnake
 	{
 		static void Main(string[] args)
 		{
-			bool useWinForms = false;
+			bool useWindowed = false;
 			foreach (string arg in args)
 			{
-				if (arg == "wf")
+				if (arg == "wd")
 				{
-					useWinForms = true;
+					useWindowed = true;
 				}
 			}
 
-			IGraphicsOutput graphicsOutput = useWinForms ? new WinFormsGraphics() : new ConsoleGraphics();
+			IGraphicsOutput graphicsOutput = useWindowed ? new SFMLGraphics() : new ConsoleGraphics();
 
 			MainMenuOption choice;
 
