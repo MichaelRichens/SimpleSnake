@@ -26,6 +26,7 @@ namespace SimpleSnake
 				{
 					var game = new SnakeGame(Settings.defaultWidth, Settings.defaultHeight, Settings.startingLength, Settings.startingDirection, Settings.defaultDelay, graphicsOutput);
 					game.Play();
+					graphicsOutput.PostPlayCleanup();
 				}
 			} while (choice != MainMenuOption.Quit);
 		}

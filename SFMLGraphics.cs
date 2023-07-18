@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 
 namespace SimpleSnake
@@ -13,13 +14,29 @@ namespace SimpleSnake
 	/// </summary>
 	public class SFMLGraphics : IGraphicsOutput
 	{
-		// The integer value of Keyboard.Key.Num0
+		/// <summary>
+		/// The integer value of Keyboard.Key.Num0
+		/// </summary>
 		private const int SfmlNum0 = 26;
-		// The integer value of Keyboard.Key.Numpad0
+
+		/// <summary>
+		/// The integer value of Keyboard.Key.Numpad0
+		/// </summary>
 		private const int SfmlNumPad0 = 75;
 
+		/// <summary>
+		/// The size of each cell in pixels.
+		/// </summary>
+		private static readonly int cellSize = 15;
+
+		/// <summary>
+		/// The font used for text output.
+		/// </summary>
 		private readonly Font font;
 
+		/// <summary>
+		/// The game window renderer.
+		/// </summary>
 		private readonly RenderWindow window;
 
 		/// <summary>
@@ -31,7 +48,7 @@ namespace SimpleSnake
 
 			font = new Font("../../../fonts/MontserratMedium.ttf");
 
-			window.Clear(Color.Black);
+			window.Clear(Settings.backgroundColour.sfml);
 
 			// Since this window runs the whole application, closing it should close the app.
 			// There will be no resources that need cleanup, so attaching a handler that does an immediate program termination is a convenient way to provide this functionality.
@@ -55,7 +72,17 @@ namespace SimpleSnake
 		/// <param name="height">The height of the board in cells.</param>
 		public void InitBoard(int width, int height)
 		{
-			throw new NotImplementedException("InitBoard");
+			// check window is large enough to fit game board, and expand it if not
+			// Let's say we want 200px in each dimension larger than it takes to display the board.
+			Vector2u oldWinSize = window.Size;
+			uint minX = (uint)width * (uint)cellSize + 200;
+			uint minY = (uint)height * (uint)cellSize + 200;
+			if (minX > oldWinSize.X || minY > oldWinSize.Y)
+			{
+				Vector2u newWinSize = new(minX > oldWinSize.X ? minX : oldWinSize.X, minY > oldWinSize.Y ? minY : oldWinSize.Y);
+				window.Size = newWinSize;
+			}
+
 		}
 
 		/// <summary>
@@ -108,7 +135,7 @@ namespace SimpleSnake
 					Position = new SFML.System.Vector2f(textPosLeft, textPosTop * optionNum),
 
 					// Set the color of the text
-					FillColor = Color.White
+					FillColor = Settings.textColour.sfml
 				};
 				optionText.Add(text);
 
@@ -193,7 +220,7 @@ namespace SimpleSnake
 			// Window loop
 			while (playerChoice == -1)
 			{
-				window.Clear(Color.Black);
+				window.Clear(Settings.backgroundColour.sfml);
 
 				foreach (Text text in optionText)
 				{
@@ -212,6 +239,14 @@ namespace SimpleSnake
 
 			// Return the selected option.
 			return options[playerChoice];
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void PostPlayCleanup()
+		{
+			throw new NotImplementedException("PostPlayCleanup");
 		}
 	}
 }

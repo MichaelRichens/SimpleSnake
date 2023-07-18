@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,25 +19,11 @@ namespace SimpleSnake
 		private static readonly char emptyCellChar = ' ';
 		private static readonly char snakeSegmentChar = '█';
 		private static readonly char pillChar = '@';
-		private static readonly ConsoleColor backgroundColour = ConsoleColor.Black;
-		private static readonly ConsoleColor sceneryColour = ConsoleColor.White;
-		private static readonly ConsoleColor snakeColour = ConsoleColor.Blue;
-		private static readonly ConsoleColor pillColour = ConsoleColor.Yellow;
 
 		/// <summary>
 		/// Holds the cursor position that the board is drawn relative to.  Value set by <see cref="InitBoard" />.
 		/// </summary>
 		private (int x, int y) gameOriginCursor;
-
-		/// <summary>
-		/// Holds the console background colour set when the instance was created.
-		/// </summary>
-		private readonly ConsoleColor initialBackgroundColour;
-
-		/// <summary>
-		/// Holds the console foreground colour set when the instance was created.
-		/// </summary>
-		private readonly ConsoleColor initialForegroundColour;
 
 		/// <summary>
 		/// prevCells is used to store a copy of the cells array from the previous loop iteration.  The Draw method uses this to calculate which cells have changed and need to be redrawn.  The Draw method makes the copy once it has finished updating the console.
@@ -47,14 +34,12 @@ namespace SimpleSnake
 		{
 			Console.CursorVisible = false;
 
-			// Save user's settings so we can revert back to them after drawing graphics for menu/exit game text.
-			initialBackgroundColour = Console.BackgroundColor;
-			initialForegroundColour = Console.ForegroundColor;
-
 			// Put an empty array in prevCells to avoid it being null.
 			prevCells = new Cell[0, 0];
 
-			Console.BackgroundColor = backgroundColour;
+			// Set up colours for text.
+			Console.BackgroundColor = Settings.backgroundColour.console;
+			Console.ForegroundColor = Settings.textColour.console;
 		}
 
 		/// <summary>
@@ -81,13 +66,22 @@ namespace SimpleSnake
 		/// <exception cref="NotImplementedException">On unknown CellType.</exception>
 		private static ConsoleColor GetCellColour(CellType cellType) => cellType switch
 		{
-			CellType.Wall or CellType.Empty => sceneryColour,
-			CellType.SnakeSegment => snakeColour,
-			CellType.GrowPill => pillColour,
+			CellType.Wall or CellType.Empty => Settings.sceneryColour.console,
+			CellType.SnakeSegment => Settings.snakeColour.console,
+			CellType.GrowPill => Settings.pillColour.console,
 
 			_ => throw new NotImplementedException($"No case found for {cellType}")
 		};
 
+		/// <summary>
+		/// Clear the console and reset colours ready for text output.
+		/// </summary>
+		public void PostPlayCleanup()
+		{
+			Console.BackgroundColor = Settings.backgroundColour.console;
+			Console.ForegroundColor = Settings.textColour.console;
+			Console.Clear();
+		}
 
 		/// <summary>
 		/// Draws the board to the Console.
@@ -122,11 +116,6 @@ namespace SimpleSnake
 
 			// Store the current cells in prevCells, for use next iteration.
 			Array.Copy(cells, prevCells, cells.Length);
-
-			// Leave the console colours in their default state, with the cursor at the end of the output (so if we exit and display some text it appears correctly).
-			Console.BackgroundColor = initialBackgroundColour;
-			Console.ForegroundColor = initialForegroundColour;
-			Console.SetCursorPosition(0, gameOriginCursor.y + height - 1);
 		}
 
 		/// <summary>
@@ -139,6 +128,36 @@ namespace SimpleSnake
 			// Create a prevCells array populated by Empty cells ready for the first call of the Draw method.
 			prevCells = new Cell[width, height];
 
+			// If running on Windows, resize the Console window to fit the game if needed.  Skip on other platforms since it is not supported - user can do it themselves if they want.
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				// Check that the window is large enough, and enlarge it if not.  units are characters.
+				// Lets say we want 5 chars extra in each dimension.
+				int minWidth = width + 5;
+				int minHeight = height + 5;
+
+				if (minWidth < Console.WindowWidth || minHeight < Console.WindowHeight)
+				{
+					// Calculate new dimensions
+					int newWidth = minWidth > Console.WindowWidth ? minWidth : Console.WindowWidth;
+					int newHeight = minHeight > Console.WindowHeight ? minHeight : Console.WindowHeight;
+
+					// See if we need to expand the buffer
+					if (Console.BufferWidth < newWidth)
+					{
+						Console.BufferWidth = newWidth;
+					}
+					if (Console.BufferHeight < newHeight)
+					{
+						Console.BufferHeight = newHeight;
+					}
+
+					// Resize the Console window
+					Console.SetWindowSize(newWidth, newHeight);
+				}
+			}
+
+			// Clear screnn and write header text.
 			Console.Clear();
 			Console.WriteLine(TextStrings.ConsoleBoardHeading(Settings.pauseKey.console, Settings.quitKey.console));
 			Console.WriteLine();

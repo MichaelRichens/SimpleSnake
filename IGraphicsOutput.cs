@@ -32,5 +32,10 @@ namespace SimpleSnake
 		/// <returns>The chosen option - a value of the enum type passed in.</returns>
 		/// <exception cref="ArgumentException">If there are no values in the enum, or if the number of values in the enum does not match the size of the enumTextLookup dictionary.</exception>
 		public TEnum MenuFromEnum<TEnum>(Dictionary<TEnum, string> enumTextLookup) where TEnum : struct, Enum;
+
+		/// <summary>
+		/// Called immediately after a game is over to revert any changes made to the graphics system for it.
+		/// </summary>
+		public void PostPlayCleanup();
 	}
 }
