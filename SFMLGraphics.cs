@@ -122,7 +122,7 @@ namespace SimpleSnake
 			void keyPressHandler(object? sender, KeyEventArgs e)
 			{
 				// Dealing with converting KeyEventArgs.Code enum back to character is annoying since there doesn't appear to be a conversion function.
-				// And since we are using numbers, it could be either the main number keys of the num pad keys that are used.
+				// And since we are using numbers, it could be either the main number keys or the num pad keys that are used.
 				// We'll check for both (using the offset from the integer value of the two '0' keys), and if either of them works out at a valid option number, let that option be selected.
 
 				int maybeNum = (int)e.Code - SfmlNum0;
