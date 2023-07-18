@@ -265,7 +265,7 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// Removes handlers, and naything else that needs to be done to the window post-game.
+		/// Removes handlers, and does anything else that needs to be done to the window post-game.
 		/// </summary>
 		public void PostPlayCleanup()
 		{
