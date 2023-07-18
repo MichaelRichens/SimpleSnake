@@ -95,7 +95,7 @@ namespace SimpleSnake
 						loopTimer.Start();
 
 						// If the user pressed the quit key, assume they wanted to quit rather than unpause.
-						if (unpauseKey.Key == Settings.quitKey)
+						if (unpauseKey.Key == Settings.quitKey.console)
 						{
 							endGame = true;
 						}
@@ -229,12 +229,12 @@ namespace SimpleSnake
 			{
 				action = keyInfo.Key switch
 				{
-					var k when k == Settings.upKey => PlayerAction.Up,
-					var k when k == Settings.downKey => PlayerAction.Down,
-					var k when k == Settings.leftKey => PlayerAction.Left,
-					var k when k == Settings.rightKey => PlayerAction.Right,
-					var k when k == Settings.pauseKey => PlayerAction.Pause,
-					var k when k == Settings.quitKey => PlayerAction.Quit,
+					var k when k == Settings.upKey.console => PlayerAction.Up,
+					var k when k == Settings.downKey.console => PlayerAction.Down,
+					var k when k == Settings.leftKey.console => PlayerAction.Left,
+					var k when k == Settings.rightKey.console => PlayerAction.Right,
+					var k when k == Settings.pauseKey.console => PlayerAction.Pause,
+					var k when k == Settings.quitKey.console => PlayerAction.Quit,
 					_ => PlayerAction.None
 				};
 
