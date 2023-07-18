@@ -21,7 +21,7 @@ namespace SimpleSnake
 
 			do
 			{
-				choice = graphicsOutput.MainMenu();
+				choice = graphicsOutput.MenuFromEnum<MainMenuOption>(TextStrings.MainMenu);
 				if (choice == MainMenuOption.Play)
 				{
 					var game = new SnakeGame(Settings.defaultWidth, Settings.defaultHeight, Settings.startingLength, Settings.startingDirection, Settings.defaultDelay, graphicsOutput);

@@ -53,16 +53,6 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// Presents the main game menu to the player, and returns their choice.
-		/// </summary>
-		/// <returns>The choice made by the player.</returns>
-		public MainMenuOption MainMenu()
-		{
-			return MenuFromEnum<MainMenuOption>(TextStrings.MainMenu);
-
-		}
-
-		/// <summary>
 		/// A utility function for displaying a menu to the player inside the instance's window, and getting a choice from all the options in the enum type parameter that is passed.  Text for the options is passed in as a dictionary.
 		/// </summary>
 		/// <typeparam name="TEnum">The enum representing the options to be presented to the player.</typeparam>
@@ -70,7 +60,7 @@ namespace SimpleSnake
 		/// <returns>The chosen option - a value of the enum type passed in.</returns>
 		/// <exception cref="ArgumentException">If there are no values in the enum, or if the number of values in the enum does not match the size of the enumTextLookup dictionary.</exception>
 		/// <exception cref="NotImplementedException">Enums with more than 9 values are not handled.</exception>
-		private TEnum MenuFromEnum<TEnum>(Dictionary<TEnum, string> enumTextLookup) where TEnum : struct, Enum
+		public TEnum MenuFromEnum<TEnum>(Dictionary<TEnum, string> enumTextLookup) where TEnum : struct, Enum
 		{
 			TEnum[] values = Enum.GetValues<TEnum>().ToArray();
 
