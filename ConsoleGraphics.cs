@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SimpleSnake
 {
+	/// <summary>
+	/// This class provides the C# Console specific elements required to run the game in a Console window, as defined in the <see cref="IGraphicsOutput" /> interface.	
+	/// </summary>
 	public class ConsoleGraphics : IGraphicsOutput
 	{
 		// Console settings - might make some of these user configurable.		
