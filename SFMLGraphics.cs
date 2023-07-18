@@ -11,7 +11,7 @@ namespace SimpleSnake
 	/// <summary>
 	/// This class provides the SFML specific elements required to run the game in an SFML window, as defined in the <see cref="IGraphicsOutput" /> interface.	
 	/// </summary>
-	class SFMLGraphics : IGraphicsOutput
+	public class SFMLGraphics : IGraphicsOutput
 	{
 		// The integer value of Keyboard.Key.Num0
 		private const int SfmlNum0 = 26;
@@ -25,7 +25,7 @@ namespace SimpleSnake
 		/// <summary>
 		/// Returns a new instance of SFMLGraphics, which creates a window that it will use for its output.
 		/// </summary>
-		internal SFMLGraphics()
+		public SFMLGraphics()
 		{
 			window = new RenderWindow(new VideoMode(800, 600), "SimpleSnake");
 
