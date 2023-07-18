@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SimpleSnake
 {
 	/// <summary>
-	/// IGraphicsOutput controls iteraction with the graphics display, and is implemented by classes that are injected into the application to run it in different graphical environments
+	/// IGraphicsOutput controls iteraction with the graphics display, and is implemented by classes that are provided to the application to run it in the selected graphical environments
 	/// </summary>
 	public interface IGraphicsOutput
 	{
