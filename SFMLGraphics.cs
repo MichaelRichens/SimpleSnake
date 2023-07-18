@@ -193,7 +193,6 @@ namespace SimpleSnake
 			// Window loop
 			while (playerChoice == -1)
 			{
-
 				window.Clear(Color.Black);
 
 				foreach (Text text in optionText)
