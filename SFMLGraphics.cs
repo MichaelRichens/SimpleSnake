@@ -31,6 +31,11 @@ namespace SimpleSnake
 			font = new Font("../../../fonts/MontserratMedium.ttf");
 
 			window.Clear(Color.Black);
+
+			// Since this window runs the whole application, closing it should close the app.
+			// There will be no resources that need cleanup, so attaching a handler that does an immediate program termination is a convenient way to provide this functionality.
+			// This handler can be called anytime window.DispatchEvents() runs.
+			window.Closed += (sender, e) => Environment.Exit(0);
 		}
 
 		/// <summary>
