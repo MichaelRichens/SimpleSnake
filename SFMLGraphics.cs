@@ -27,7 +27,12 @@ namespace SimpleSnake
 		/// <summary>
 		/// The size of each cell in pixels.
 		/// </summary>
-		private static readonly int cellSize = 15;
+		private static readonly int cellSize = 10;
+
+		/// <summary>
+		/// Set to whatever the height and width of the sprites is.
+		/// </summary>
+		private static readonly int nativeSpriteSize = 20;
 
 		/// <summary>
 		/// The font used for text output.
@@ -38,6 +43,11 @@ namespace SimpleSnake
 		/// This is used by the window keypress handler that is set while a game is running to store a value for TryGetPlayerAction.
 		/// </summary>
 		private PlayerAction lastAction = PlayerAction.None;
+
+		/// <summary>
+		/// The sprites available for each CellType.
+		/// </summary>
+		private readonly Dictionary<CellType, List<Sprite>> sprites = new();
 
 		/// <summary>
 		/// The game window renderer.
@@ -53,6 +63,8 @@ namespace SimpleSnake
 
 			font = new Font("../../../fonts/MontserratMedium.ttf");
 
+			LoadSprites();
+
 			window.Clear(Settings.backgroundColour.sfml);
 
 			// Since this window runs the whole application, closing it should close the app.
@@ -67,7 +79,38 @@ namespace SimpleSnake
 		/// <param name="cells"></param>
 		public void DrawBoard(Cell[,] cells)
 		{
-			throw new NotImplementedException("DrawBoard");
+			window.Clear(Settings.backgroundColour.sfml);
+
+			for (int i = 0; i < cells.GetLength(0); i++)
+			{
+				for (int j = 0; j < cells.GetLength(1); j++)
+				{
+					Sprite sprite = sprites[cells[i, j].cellType][0];
+
+					sprite.Scale = new Vector2f(cellSize / (float)nativeSpriteSize, cellSize / (float)nativeSpriteSize);
+
+
+					switch (cells[i, j].cellType)
+					{
+						case CellType.Wall:
+						case CellType.Empty:
+							sprite.Color = Settings.sceneryColour.sfml;
+							break;
+						case CellType.SnakeSegment:
+							sprite.Color = Settings.snakeColour.sfml;
+							break;
+						case CellType.GrowPill:
+							sprite.Color = Settings.pillColour.sfml;
+							break;
+					}
+
+					sprite.Position = new Vector2f(j * cellSize, i * cellSize);
+
+					window.Draw(sprite);
+				}
+			}
+
+			window.Display();
 		}
 
 		/// <summary>
@@ -298,6 +341,32 @@ namespace SimpleSnake
 			{
 				lastAction = action;
 			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private void LoadSprites()
+		{
+			sprites[CellType.Empty] = new List<Sprite>();
+			Texture tx = new("../../../sprites/floor.png");
+			Sprite sp = new(tx);
+			sprites[CellType.Empty].Add(sp);
+
+			sprites[CellType.Wall] = new List<Sprite>();
+			tx = new("../../../sprites/wall.png");
+			sp = new(tx);
+			sprites[CellType.Wall].Add(sp);
+
+			sprites[CellType.SnakeSegment] = new List<Sprite>();
+			tx = new("../../../sprites/snake.png");
+			sp = new(tx);
+			sprites[CellType.SnakeSegment].Add(sp);
+
+			sprites[CellType.GrowPill] = new List<Sprite>();
+			tx = new("../../../sprites/pill.png");
+			sp = new(tx);
+			sprites[CellType.GrowPill].Add(sp);
 		}
 	}
 }

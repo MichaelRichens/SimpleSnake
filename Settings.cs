@@ -26,8 +26,8 @@ namespace SimpleSnake
 		internal static readonly Colour snakeColour = new(ConsoleColor.Blue, Color.Blue);
 		internal static readonly Colour textColour = new(ConsoleColor.White, Color.White);
 
-		internal static int defaultWidth = 80;
-		internal static int defaultHeight = 40;
+		internal static int defaultWidth = 70;
+		internal static int defaultHeight = 50;
 
 		internal static int defaultDelay = 70;
 
