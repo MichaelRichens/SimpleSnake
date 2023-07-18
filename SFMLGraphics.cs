@@ -83,7 +83,7 @@ namespace SimpleSnake
 				throw new ArgumentException($"The enumTextLookup dictionary does not contain the same number of entries as there are values in the {typeof(TEnum).Name} enum");
 			}
 
-			// The number of pixels that menu item Text elements are posiiitioned from the left.
+			// The number of pixels that menu item Text elements are positioned from the left.
 			int textPosLeft = 100;
 			// The number of pixels that menu items are positioned from each other (and for the first element, the nuimber of pixels from the top)
 			int textPosTop = 50;
