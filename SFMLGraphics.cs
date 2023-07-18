@@ -87,6 +87,8 @@ namespace SimpleSnake
 			int textPosLeft = 100;
 			// The number of pixels that menu items are positioned from each other (and for the first element, the nuimber of pixels from the top)
 			int textPosTop = 50;
+			// The size of the text characters
+			uint textSize = 30;
 
 			// Dictionary to store keypress assigned to choose menu option to the number that will be displayed for that option.
 			Dictionary<int, TEnum> options = new();
@@ -97,7 +99,7 @@ namespace SimpleSnake
 			foreach (TEnum option in values)
 			{
 				// Create the text object
-				var text = new Text($"{(char)(optionNum + '0')}. {enumTextLookup[option]}", font, 30)
+				var text = new Text($"{(char)(optionNum + '0')}. {enumTextLookup[option]}", font, textSize)
 				{
 					// Set the position of the text
 					Position = new SFML.System.Vector2f(textPosLeft, textPosTop * optionNum),
