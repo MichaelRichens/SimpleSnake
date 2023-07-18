@@ -35,6 +35,11 @@ namespace SimpleSnake
 		private readonly Font font;
 
 		/// <summary>
+		/// This is used by the window keypress handler that is set while a game is running to store a value for TryGetPlayerAction.
+		/// </summary>
+		private PlayerAction lastAction = PlayerAction.None;
+
+		/// <summary>
 		/// The game window renderer.
 		/// </summary>
 		private readonly RenderWindow window;
@@ -83,6 +88,8 @@ namespace SimpleSnake
 				window.Size = newWinSize;
 			}
 
+			// Add handlers
+			window.KeyPressed += InGameKeypressHandler;
 		}
 
 		/// <summary>
@@ -248,15 +255,49 @@ namespace SimpleSnake
 		/// <returns>True if a new action was found, false otherwise.</returns>		
 		public bool TryGetPlayerAction(out PlayerAction action)
 		{
-			throw new NotImplementedException("TryGetPlayerAction");
+			window.DispatchEvents();
+
+			action = lastAction;
+			// This has been processed, so set it to None
+			lastAction = PlayerAction.None;
+
+			return action != PlayerAction.None;
 		}
 
 		/// <summary>
-		/// 
+		/// Removes handlers, and naything else that needs to be done to the window post-game.
 		/// </summary>
 		public void PostPlayCleanup()
 		{
-			throw new NotImplementedException("PostPlayCleanup");
+			// Remove handlers
+			window.KeyPressed -= InGameKeypressHandler;
+		}
+
+		/// <summary>
+		/// This handler is called for every keypress in the order that they were placed, when window.DispatchEvents() is called by <see cref="TryGetPlayerAction" />.
+		/// It records the PlayerAction the keypress translates to in <see cref="lastAction" />.
+		/// Which will end up with the action from the last valid key pressed being stored there.
+		/// It will not overwrite a value that is not PlayerAction.None with PlayerAction.None (so if a valid key is followed by an invalid one in the same iteration, it will not overwrite it).  
+		/// </summary>
+		/// <param name="sender">Not used.</param>
+		/// <param name="e">The KeyEventArgs object.</param>
+		private void InGameKeypressHandler(object? sender, KeyEventArgs e)
+		{
+			PlayerAction action = e.Code switch
+			{
+				var k when k == Settings.upKey.sfml => PlayerAction.Up,
+				var k when k == Settings.downKey.sfml => PlayerAction.Down,
+				var k when k == Settings.leftKey.sfml => PlayerAction.Left,
+				var k when k == Settings.rightKey.sfml => PlayerAction.Right,
+				var k when k == Settings.pauseKey.sfml => PlayerAction.Pause,
+				var k when k == Settings.quitKey.sfml => PlayerAction.Quit,
+				_ => PlayerAction.None
+			};
+
+			if (action != PlayerAction.None)
+			{
+				lastAction = action;
+			}
 		}
 	}
 }
