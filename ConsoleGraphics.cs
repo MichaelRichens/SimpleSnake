@@ -154,7 +154,7 @@ namespace SimpleSnake
 
 			// Clear screnn and write header text.
 			Console.Clear();
-			Console.WriteLine(TextStrings.ConsoleBoardHeading(Settings.pauseKey.console, Settings.quitKey.console));
+			Console.WriteLine(TextStrings.GameBoardHeading(Settings.pauseKey.console, Settings.quitKey.console));
 			Console.WriteLine();
 
 			// Store where the cursor is so that the game can be drawn below it (and to the right of it if we want a side menu).

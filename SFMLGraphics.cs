@@ -40,6 +40,11 @@ namespace SimpleSnake
 		private readonly Font font;
 
 		/// <summary>
+		/// The title text to appear above the game board.
+		/// </summary>
+		private Text gameBoardHeading;
+
+		/// <summary>
 		/// This is used by the window keypress handler that is set while a game is running to store a value for TryGetPlayerAction.
 		/// </summary>
 		private PlayerAction lastAction = PlayerAction.None;
@@ -65,6 +70,8 @@ namespace SimpleSnake
 
 			LoadSprites();
 
+			gameBoardHeading = new Text(TextStrings.GameBoardHeading(Settings.pauseKey.sfml, Settings.quitKey.sfml), font, 20);
+
 			window.Clear(Settings.backgroundColour.sfml);
 
 			// Since this window runs the whole application, closing it should close the app.
@@ -80,6 +87,12 @@ namespace SimpleSnake
 		public void DrawBoard(Cell[,] cells)
 		{
 			window.Clear(Settings.backgroundColour.sfml);
+
+			window.Draw(gameBoardHeading);
+
+			float boardTop = gameBoardHeading.GetGlobalBounds().Top + gameBoardHeading.GetGlobalBounds().Height + 10;
+
+			float boardLeft = 20;
 
 			for (int i = 0; i < cells.GetLength(0); i++)
 			{
@@ -104,7 +117,7 @@ namespace SimpleSnake
 							break;
 					}
 
-					sprite.Position = new Vector2f(j * cellSize, i * cellSize);
+					sprite.Position = new Vector2f(j * cellSize + boardLeft, i * cellSize + boardTop);
 
 					window.Draw(sprite);
 				}
@@ -182,7 +195,7 @@ namespace SimpleSnake
 				var text = new Text($"{(char)(optionNum + '0')}. {enumTextLookup[option]}", font, textSize)
 				{
 					// Set the position of the text
-					Position = new SFML.System.Vector2f(textPosLeft, textPosTop * optionNum),
+					Position = new Vector2f(textPosLeft, textPosTop * optionNum),
 
 					// Set the color of the text
 					FillColor = Settings.textColour.sfml
