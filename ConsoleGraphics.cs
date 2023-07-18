@@ -145,7 +145,7 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// A utility function for displaying a Console menu to the player, getting a choice from all the options in the enum type parameter that is passed.  Text for the options is passed in as a dictionary.
+		/// A utility function for displaying a keyboard driven Console menu to the player, getting a choice from all the options in the enum type parameter that is passed.  Text for the options is passed in as a dictionary.
 		/// </summary>
 		/// <typeparam name="TEnum">The enum representing the options to be presented to the player.</typeparam>
 		/// <param name="enumTextLookup">A dictionary containing each of these options as a key, with the value being a string with the text to display.</param>
