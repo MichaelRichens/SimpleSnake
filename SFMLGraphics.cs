@@ -84,6 +84,11 @@ namespace SimpleSnake
 				throw new ArgumentException($"The enumTextLookup dictionary does not contain the same number of entries as there are values in the {typeof(TEnum).Name} enum");
 			}
 
+			// The number of pixels that menu item Text elements are posiiitioned from the left.
+			int textPosLeft = 100;
+			// The number of pixels that menu items are positioned from each other (and for the first element, the nuimber of pixels from the top)
+			int textPosTop = 50;
+
 			// Dictionary to store keypress assigned to choose menu option to the number that will be displayed for that option.
 			Dictionary<int, TEnum> options = new();
 
@@ -93,10 +98,10 @@ namespace SimpleSnake
 			foreach (TEnum option in values)
 			{
 				// Create the text object
-				var text = new Text($"{(char)(optionNum + '0')}. {enumTextLookup[option]}", font, 50)
+				var text = new Text($"{(char)(optionNum + '0')}. {enumTextLookup[option]}", font, 30)
 				{
 					// Set the position of the text
-					Position = new SFML.System.Vector2f(100, 100 * optionNum),
+					Position = new SFML.System.Vector2f(textPosLeft, textPosTop * optionNum),
 
 					// Set the color of the text
 					FillColor = Color.White
@@ -114,6 +119,7 @@ namespace SimpleSnake
 			int playerChoice = -1;
 
 			// This is the keypress handler for the window
+			// Sets playerChoice to the relevant menu item value based on the key entered
 			void keyPressHandler(object? sender, KeyEventArgs e)
 			{
 				// Dealing with converting KeyEventArgs.Code enum back to character is annoying since there doesn't appear to be a conversion function.
@@ -132,11 +138,55 @@ namespace SimpleSnake
 				{
 					playerChoice = maybeNumPad;
 				}
-
 			}
+
+			// This is the mouse click handler for the window
+			// Sets playerChoice to the relevant menu item value if one is clicked
+			void mouseClickHandler(object? sender, MouseButtonEventArgs e)
+			{
+
+				int optionNum = 1;
+				foreach (Text text in optionText)
+				{
+					FloatRect bounds = text.GetGlobalBounds();
+					if (e.X >= bounds.Left && e.X <= bounds.Left + bounds.Width && e.Y >= bounds.Top && e.Y <= bounds.Top + bounds.Height)
+					{
+						playerChoice = optionNum;
+						return;
+					}
+
+					optionNum++;
+				}
+			}
+
+			// Cursor objects for the mouseMoveEventHandler
+			Cursor handCursor = new(Cursor.CursorType.Hand);
+			Cursor arrowCursor = new(Cursor.CursorType.Arrow);
+
+			// This is the mouse move handler for the window.
+			// It changes the cursor between arrow and hand depending on whether it is over a menu item or not.
+			void mouseMoveEventHandler(object? sender, MouseMoveEventArgs e)
+			{
+				int optionNum = 1;
+				foreach (Text text in optionText)
+				{
+					FloatRect bounds = text.GetGlobalBounds();
+					if (e.X >= bounds.Left && e.X <= bounds.Left + bounds.Width && e.Y >= bounds.Top && e.Y <= bounds.Top + bounds.Height)
+					{
+						window.SetMouseCursor(handCursor);
+						return;
+					}
+
+					optionNum++;
+				}
+				window.SetMouseCursor(arrowCursor);
+			}
+
 
 			// Add event handlers to window
 			window.KeyPressed += keyPressHandler;
+			window.MouseButtonPressed += mouseClickHandler;
+			window.MouseMoved += mouseMoveEventHandler;
 
 			// Window loop
 			while (playerChoice == -1)
@@ -156,6 +206,8 @@ namespace SimpleSnake
 
 			// Remove event handlers from window
 			window.KeyPressed -= keyPressHandler;
+			window.MouseButtonPressed -= mouseClickHandler;
+			window.MouseMoved -= mouseMoveEventHandler;
 
 			// Return the selected option.
 			return options[playerChoice];
