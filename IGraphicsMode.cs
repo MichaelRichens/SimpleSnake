@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace SimpleSnake
 {
 	/// <summary>
-	/// IGraphicsOutput controls iteraction with the graphics display, and is implemented by classes that are provided to the application to run it in the selected graphical environments
+	/// IGraphicsMode controls iteraction with the graphics display, and is implemented by classes that are provided to the application to run it in the selected graphical environments
 	/// </summary>
-	public interface IGraphicsOutput
+	public interface IGraphicsMode
 	{
 		/// <summary>
 		/// The DrawBoard method is passed a 2D cells array, and displays it to the user.

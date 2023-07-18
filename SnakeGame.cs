@@ -23,9 +23,9 @@ namespace SimpleSnake
 		internal readonly Board board;
 
 		/// <summary>
-		/// A reference to the IGraphicsOutput that handles display of graphics and user input.
+		/// A reference to the IGraphicsMode that handles display of graphics and user input.
 		/// </summary>
-		private readonly IGraphicsOutput graphicsOutput;
+		private readonly IGraphicsMode graphicsMode;
 
 		/// <summary>
 		/// The delay between game updates in ms
@@ -38,16 +38,16 @@ namespace SimpleSnake
 		/// <param name="width">The width of the game board in cells.</param>
 		/// <param name="height">The height of the game board in cells.</param>
 		/// <param name="delay">The delay between game updates in ms.</param>
-		/// <param name="graphicsOutput">Provide an IGraphicsOutput implementor to display the graphics.</param>
-		internal SnakeGame(int width, int height, int startingLength, Direction startingDirection, int delay, IGraphicsOutput graphicsOutput)
+		/// <param name="graphicsMode">Provide an IGraphicsMode implementor to display the graphics.</param>
+		internal SnakeGame(int width, int height, int startingLength, Direction startingDirection, int delay, IGraphicsMode graphicsMode)
 		{
-			this.graphicsOutput = graphicsOutput;
+			this.graphicsMode = graphicsMode;
 
 			Delay = delay;
 
 			snake = new Snake(startingLength, startingDirection, width / 2, height / 2);
 
-			board = new Board(width, height, snake.HeadX, snake.HeadY, snake.length, graphicsOutput);
+			board = new Board(width, height, snake.HeadX, snake.HeadY, snake.length, graphicsMode);
 		}
 
 		/// <summary>
@@ -78,7 +78,7 @@ namespace SimpleSnake
 				board.Draw();
 
 				// Handle player keypress.
-				if (graphicsOutput.TryGetPlayerAction(out PlayerAction action))
+				if (graphicsMode.TryGetPlayerAction(out PlayerAction action))
 				{
 					// Handle player changing the snake's direction.
 					snake.direction = GetNewDirection(snake.direction, action);

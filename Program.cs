@@ -15,18 +15,18 @@ namespace SimpleSnake
 				}
 			}
 
-			IGraphicsOutput graphicsOutput = useWindowed ? new SFMLGraphics() : new ConsoleGraphics();
+			IGraphicsMode graphicsMode = useWindowed ? new SFMLGraphics() : new ConsoleGraphics();
 
 			MainMenuOption choice;
 
 			do
 			{
-				choice = graphicsOutput.MenuFromEnum<MainMenuOption>(TextStrings.MainMenu);
+				choice = graphicsMode.MenuFromEnum<MainMenuOption>(TextStrings.MainMenu);
 				if (choice == MainMenuOption.Play)
 				{
-					var game = new SnakeGame(Settings.defaultWidth, Settings.defaultHeight, Settings.startingLength, Settings.startingDirection, Settings.defaultDelay, graphicsOutput);
+					var game = new SnakeGame(Settings.defaultWidth, Settings.defaultHeight, Settings.startingLength, Settings.startingDirection, Settings.defaultDelay, graphicsMode);
 					game.Play();
-					graphicsOutput.PostPlayCleanup();
+					graphicsMode.PostPlayCleanup();
 				}
 			} while (choice != MainMenuOption.Quit);
 		}

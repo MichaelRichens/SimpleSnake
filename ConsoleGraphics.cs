@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace SimpleSnake
 {
 	/// <summary>
-	/// This class provides the C# Console specific elements required to run the game in a Console window, as defined in the <see cref="IGraphicsOutput" /> interface.	
+	/// This class provides the C# Console specific elements required to run the game in a Console window, as defined in the <see cref="IGraphicsMode" /> interface.	
 	/// </summary>
-	public class ConsoleGraphics : IGraphicsOutput
+	public class ConsoleGraphics : IGraphicsMode
 	{
 		// Console settings - might make some of these user configurable.		
 		private static readonly char wallChar = '█';

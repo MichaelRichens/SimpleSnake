@@ -26,9 +26,9 @@ namespace SimpleSnake
 		private readonly Cell[,] cells;
 
 		/// <summary>
-		/// Holds a reference to the injected IGraphicsOutput that handles drawing the board.
+		/// Holds a reference to the injected IGraphicsMode that handles drawing the board.
 		/// </summary>
-		private readonly IGraphicsOutput graphicsOutput;
+		private readonly IGraphicsMode graphicsMode;
 
 		/// <summary>
 		/// Random number generator.
@@ -53,10 +53,10 @@ namespace SimpleSnake
 		/// <param name="snakeStartX">The horizontal cell to start the snake (measured from the left).</param>
 		/// <param name="snakeStartY">The vertical cell to start the snake (measured from the top).</param>
 		/// <param name="snakeLength">The starting length of the snake.</param>
-		/// <param name="graphicsOutput">Provide an IGraphicsOutput implementor to display the graphics.</param>
-		internal Board(int width, int height, int snakeStartX, int snakeStartY, int snakeLength, IGraphicsOutput graphicsOutput)
+		/// <param name="graphicsMode">Provide an IGraphicsMode implementor to display the graphics.</param>
+		internal Board(int width, int height, int snakeStartX, int snakeStartY, int snakeLength, IGraphicsMode graphicsMode)
 		{
-			this.graphicsOutput = graphicsOutput;
+			this.graphicsMode = graphicsMode;
 
 			Width = width;
 			Height = height;
@@ -95,11 +95,11 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// Draws the current state of the board using the IGraphicsOutput instance that was injected at construction.
+		/// Draws the current state of the board using the IGraphicsMode instance that was injected at construction.
 		/// </summary>
 		internal void Draw()
 		{
-			graphicsOutput.DrawBoard(cells);
+			graphicsMode.DrawBoard(cells);
 		}
 
 		internal void ChangeSnakeLength(int amount)
@@ -125,11 +125,11 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// Prepares the graphics output ready for the board to first be drawn.
+		/// Prepares the graphics mode ready for the board to first be drawn.
 		/// </summary>
 		internal void InitBoard()
 		{
-			graphicsOutput.InitBoard(Width, Height);
+			graphicsMode.InitBoard(Width, Height);
 		}
 
 		/// <summary>

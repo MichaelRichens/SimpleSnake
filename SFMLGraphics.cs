@@ -10,9 +10,9 @@ using SFML.Window;
 namespace SimpleSnake
 {
 	/// <summary>
-	/// This class provides the SFML specific elements required to run the game in an SFML window, as defined in the <see cref="IGraphicsOutput" /> interface.	
+	/// This class provides the SFML specific elements required to run the game in an SFML window, as defined in the <see cref="IGraphicsMode" /> interface.	
 	/// </summary>
-	public class SFMLGraphics : IGraphicsOutput
+	public class SFMLGraphics : IGraphicsMode
 	{
 		/// <summary>
 		/// The integer value of Keyboard.Key.Num0
