@@ -37,5 +37,12 @@ namespace SimpleSnake
 		/// Called immediately after a game is over to revert any changes made to the graphics system for it.
 		/// </summary>
 		public void PostPlayCleanup();
+
+		/// <summary>
+		/// This method returns a bool indicating whether there is a new game action performed by the player, and if so provides it as a PlayerAction out parameter.
+		/// </summary>
+		/// <param name="action">Out parameter. The new action input by the player.</param>
+		/// <returns>True if a new action was found, false otherwise.</returns>		
+		public bool TryGetPlayerAction(out PlayerAction action);
 	}
 }

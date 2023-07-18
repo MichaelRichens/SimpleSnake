@@ -23,9 +23,9 @@ namespace SimpleSnake
 		internal readonly Board board;
 
 		/// <summary>
-		/// This field is a buffer used by the <see cref="TryGetPlayerAction">TryGetPlayerAction</see> method, declared as a class field and reused to avoid frequent allocations.
+		/// A reference to the IGraphicsOutput that handles display of graphics and user input.
 		/// </summary>
-		private readonly List<ConsoleKeyInfo> keypressBuffer = new(10);
+		private readonly IGraphicsOutput graphicsOutput;
 
 		/// <summary>
 		/// The delay between game updates in ms
@@ -41,6 +41,8 @@ namespace SimpleSnake
 		/// <param name="graphicsOutput">Provide an IGraphicsOutput implementor to display the graphics.</param>
 		internal SnakeGame(int width, int height, int startingLength, Direction startingDirection, int delay, IGraphicsOutput graphicsOutput)
 		{
+			this.graphicsOutput = graphicsOutput;
+
 			Delay = delay;
 
 			snake = new Snake(startingLength, startingDirection, width / 2, height / 2);
@@ -76,7 +78,7 @@ namespace SimpleSnake
 				board.Draw();
 
 				// Handle player keypress.
-				if (TryGetPlayerAction(out PlayerAction action))
+				if (graphicsOutput.TryGetPlayerAction(out PlayerAction action))
 				{
 					// Handle player changing the snake's direction.
 					snake.direction = GetNewDirection(snake.direction, action);
@@ -200,53 +202,6 @@ namespace SimpleSnake
 			}
 
 			return 0;
-		}
-
-		/// <summary>
-		/// This method returns attempts to read a new player action from the keyboard, returning true or false based on its success, with the new action as a out parameter.
-		/// It leaves the keyboard buffer empty.
-		/// It clobbers the <see cref="keypressBuffer">keypressBuffer</see> class field when it is run, but does not care about its starting contents or its contents once it has exited.
-		/// </summary>
-		/// <param name="action">Out parameter. The new action input by the player.</param>
-		/// <returns>True if a new action was found, false otherwise.</returns>
-		private bool TryGetPlayerAction(out PlayerAction action)
-		{
-			// To avoid issues if the player holds down a key and floods the buffer, we empty the keyboard buffer completely and only process the last valid key it contains.
-			// To do this we read all pending keys into our own buffer, then cycle through it backwards looking for the first (last) valid key.
-
-			// To avoid allocating it every game loop, we have a buffer declared as a field and reuse it.
-			keypressBuffer.Clear();
-
-			// Read all pending keys into keypressBuffer
-			while (Console.KeyAvailable)
-			{
-				ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-				keypressBuffer.Add(keyInfo);
-			}
-
-			// Loop through keypressBuffer backwards, and return on the first valid key we find.
-			foreach (var keyInfo in keypressBuffer.Reverse<ConsoleKeyInfo>())
-			{
-				action = keyInfo.Key switch
-				{
-					var k when k == Settings.upKey.console => PlayerAction.Up,
-					var k when k == Settings.downKey.console => PlayerAction.Down,
-					var k when k == Settings.leftKey.console => PlayerAction.Left,
-					var k when k == Settings.rightKey.console => PlayerAction.Right,
-					var k when k == Settings.pauseKey.console => PlayerAction.Pause,
-					var k when k == Settings.quitKey.console => PlayerAction.Quit,
-					_ => PlayerAction.None
-				};
-
-				if (action != PlayerAction.None)
-				{
-					return true;
-				}
-			}
-
-			// Nothing found, return false.
-			action = PlayerAction.None;
-			return false;
 		}
 	}
 }
