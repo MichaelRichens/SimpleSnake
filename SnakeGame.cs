@@ -123,7 +123,7 @@ namespace SimpleSnake
 				if (pendingMoves.Count > 0)
 				{
 					snake.direction = pendingMoves[0];
-					pendingMoves.RemoveAt(0);
+					pendingMoves.RemoveAt(0); // Can't use a Queue for pendingMoves since need to be able to inspect last element.
 				}
 
 				// Place the snake head in the next position
