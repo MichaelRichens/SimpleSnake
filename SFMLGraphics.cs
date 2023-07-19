@@ -45,6 +45,11 @@ namespace SimpleSnake
 		private readonly Font font;
 
 		/// <summary>
+		/// Random number generator.
+		/// </summary>
+		private readonly Random rng = new();
+
+		/// <summary>
 		/// The title text to appear above the game board.
 		/// </summary>
 		private Text gameBoardHeading;
@@ -113,11 +118,15 @@ namespace SimpleSnake
 			{
 				for (int j = 0; j < cells.GetLength(1); j++)
 				{
-					Sprite sprite = sprites[cells[i, j].cellType][0];
+					CellType cellType = cells[i, j].cellType;
 
+					// Get sprite - can have multiple ones for each CellType that are chosen at random.
+					Sprite sprite = sprites[cellType][rng.Next(sprites[cellType].Count)];
+
+					// Resize sprite to specified size.
 					sprite.Scale = new Vector2f(cellSize / (float)nativeSpriteSize, cellSize / (float)nativeSpriteSize);
 
-					sprite.Color = GetCellColour(cells[i, j].cellType);
+					sprite.Color = GetCellColour(cellType);
 
 					sprite.Position = new Vector2f(j * cellSize + boardLeft, i * cellSize + boardTop);
 
