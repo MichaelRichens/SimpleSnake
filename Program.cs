@@ -6,16 +6,16 @@ namespace SimpleSnake
 	{
 		static void Main(string[] args)
 		{
-			bool useWindowed = false;
+			bool useConsole = false;
 			foreach (string arg in args)
 			{
-				if (arg == "wd")
+				if (arg == "csl")
 				{
-					useWindowed = true;
+					useConsole = true;
 				}
 			}
 
-			IGraphicsMode graphicsMode = useWindowed ? new SFMLGraphics() : new ConsoleGraphics();
+			IGraphicsMode graphicsMode = useConsole ? new ConsoleGraphics() : new SFMLGraphics();
 
 			MainMenuOption choice;
 
