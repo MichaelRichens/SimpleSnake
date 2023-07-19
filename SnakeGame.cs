@@ -80,11 +80,15 @@ namespace SimpleSnake
 				// Get any player actions placed in the buffer during the last iteration
 				List<PlayerAction> actions = graphicsMode.GetPlayerActions();
 
+				// Temp variable for changes of direction to be applied to in the order they were made
+				Direction newDirection = snake.direction;
+
 				// Process player actions in the order they were made.
 				for (int i = 0; i < actions.Count; i++)
 				{
-					// Handle player changing the snake's direction.
-					snake.direction = GetNewDirection(snake.direction, actions[i]);
+					// Apply any changes of direction.  Using the original direction as the decider for whether it is a legal move as not, not the direction the snake would have been travelling in if the previous key had already been applied.
+					// This prevents the snake turning back on itself 180 degrees.
+					newDirection = GetNewDirection(snake.direction, actions[i]);
 
 					// Handle player quitting.
 					if (actions[i] == PlayerAction.Quit)
@@ -106,6 +110,9 @@ namespace SimpleSnake
 						}
 					}
 				}
+
+				// Apply the final direction, calculated after all updates have been applied in order
+				snake.direction = newDirection;
 
 				// Place the snake head in the next position
 				snake.AdvanceHead();
