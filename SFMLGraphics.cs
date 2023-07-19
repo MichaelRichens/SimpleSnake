@@ -81,6 +81,21 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
+		/// Gets the foreground colour to be used when drawing a cell based on its CellType.
+		/// </summary>
+		/// <param name="cellType">The CellType value to query.</param>
+		/// <returns>The foregound colour to use.</returns>
+		/// <exception cref="NotImplementedException">On unknown CellType.</exception>
+		private static Color GetCellColour(CellType cellType) => cellType switch
+		{
+			CellType.Wall or CellType.Empty => Settings.sceneryColour.sfml,
+			CellType.SnakeSegment => Settings.snakeColour.sfml,
+			CellType.GrowPill => Settings.pillColour.sfml,
+
+			_ => throw new NotImplementedException($"No case found for {cellType}")
+		};
+
+		/// <summary>
 		/// The DrawBoard method is passed a 2D cells array, and displays it to the user.
 		/// </summary>
 		/// <param name="cells"></param>
@@ -102,20 +117,7 @@ namespace SimpleSnake
 
 					sprite.Scale = new Vector2f(cellSize / (float)nativeSpriteSize, cellSize / (float)nativeSpriteSize);
 
-
-					switch (cells[i, j].cellType)
-					{
-						case CellType.Wall:
-						case CellType.Empty:
-							sprite.Color = Settings.sceneryColour.sfml;
-							break;
-						case CellType.SnakeSegment:
-							sprite.Color = Settings.snakeColour.sfml;
-							break;
-						case CellType.GrowPill:
-							sprite.Color = Settings.pillColour.sfml;
-							break;
-					}
+					sprite.Color = GetCellColour(cells[i, j].cellType);
 
 					sprite.Position = new Vector2f(j * cellSize + boardLeft, i * cellSize + boardTop);
 
