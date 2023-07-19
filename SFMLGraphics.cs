@@ -45,14 +45,14 @@ namespace SimpleSnake
 		private readonly Font font;
 
 		/// <summary>
+		/// The title text to appear above the game board.
+		/// </summary>
+		private readonly Text gameBoardHeading;
+
+		/// <summary>
 		/// Random number generator.
 		/// </summary>
 		private readonly Random rng = new();
-
-		/// <summary>
-		/// The title text to appear above the game board.
-		/// </summary>
-		private Text gameBoardHeading;
 
 		/// <summary>
 		/// The sprites available for each CellType.
@@ -63,6 +63,11 @@ namespace SimpleSnake
 		/// The game window renderer.
 		/// </summary>
 		private readonly RenderWindow window;
+
+		/// <summary>
+		/// Array that keeps track of the index of the sprite chosen for a particular cell.
+		/// </summary>
+		private CellSpriteIndex[,] cellSpriteIndex = new CellSpriteIndex[0, 0];
 
 		/// <summary>
 		/// Returns a new instance of SFMLGraphics, which creates a window that it will use for its output.
@@ -101,6 +106,34 @@ namespace SimpleSnake
 		};
 
 		/// <summary>
+		/// Helper function that returns a List of sprites when passed the file name and extension.  It creates sprites from all sprites found with that name followed by an incrementing integer.
+		/// I.e /path/to/fileX.ext where X is a series of numbers starting with 0.
+		/// </summary>
+		/// <param name="fileNameStart">The path and filename up to the point where the incrementing integer is inserted.</param>
+		/// <param name="fileEtension">The file extenison</param>
+		/// <returns>The list of sprites.</returns>
+		private static List<Sprite> LoadSpriteList(string fileNameStart, string fileEtension)
+		{
+			int count = 0;
+			List<Sprite> sprites = new();
+			while (true)
+			{
+				string fileName = fileNameStart + count.ToString() + '.' + fileEtension;
+				if (!File.Exists(fileName))
+				{
+					break;
+				}
+				Texture tx = new(fileName);
+				Sprite sp = new(tx);
+				sprites.Add(sp);
+
+				count++;
+			}
+
+			return sprites;
+		}
+
+		/// <summary>
 		/// The DrawBoard method is passed a 2D cells array, and displays it to the user.
 		/// </summary>
 		/// <param name="cells"></param>
@@ -120,8 +153,17 @@ namespace SimpleSnake
 				{
 					CellType cellType = cells[i, j].cellType;
 
-					// Get sprite - can have multiple ones for each CellType that are chosen at random.
-					Sprite sprite = sprites[cellType][rng.Next(sprites[cellType].Count)];
+					// Get sprite - can have multiple ones for each CellType that are chosen at random, then recorded so they don't change.					 
+					CellSpriteIndex spriteIndex = cellSpriteIndex[i, j];
+					// Check if we have a valid index for this CellType
+					if (cellType != spriteIndex.cellType || spriteIndex.index == -1)
+					{
+						// If not, pick one at random
+						spriteIndex = new(cellType, rng.Next(sprites[cellType].Count));
+						cellSpriteIndex[i, j] = spriteIndex;
+					}
+					// And use this sprite
+					Sprite sprite = sprites[cellType][spriteIndex.index];
 
 					// Resize sprite to specified size.
 					sprite.Scale = new Vector2f(cellSize / (float)nativeSpriteSize, cellSize / (float)nativeSpriteSize);
@@ -170,6 +212,17 @@ namespace SimpleSnake
 			{
 				Vector2u newWinSize = new(minX > oldWinSize.X ? minX : oldWinSize.X, minY > oldWinSize.Y ? minY : oldWinSize.Y);
 				window.Size = newWinSize;
+			}
+
+			// Dimension the cellSpriteIndex array
+			cellSpriteIndex = new CellSpriteIndex[height, width];
+			// populate it with default CellSpriteIndex values with index == -1.
+			for (int i = 0; i < height; i++)
+			{
+				for (int j = 0; j < width; j++)
+				{
+					cellSpriteIndex[i, j] = new CellSpriteIndex();
+				}
 			}
 
 			// Add handlers
@@ -367,29 +420,14 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// 
+		/// Populates the sprites Dictionary with the available sprites for each CellType.
 		/// </summary>
 		private void LoadSprites()
 		{
-			sprites[CellType.Empty] = new List<Sprite>();
-			Texture tx = new("../../../sprites/floor.png");
-			Sprite sp = new(tx);
-			sprites[CellType.Empty].Add(sp);
-
-			sprites[CellType.Wall] = new List<Sprite>();
-			tx = new("../../../sprites/wall.png");
-			sp = new(tx);
-			sprites[CellType.Wall].Add(sp);
-
-			sprites[CellType.SnakeSegment] = new List<Sprite>();
-			tx = new("../../../sprites/snake.png");
-			sp = new(tx);
-			sprites[CellType.SnakeSegment].Add(sp);
-
-			sprites[CellType.GrowPill] = new List<Sprite>();
-			tx = new("../../../sprites/pill.png");
-			sp = new(tx);
-			sprites[CellType.GrowPill].Add(sp);
+			sprites[CellType.Empty] = LoadSpriteList("../../../sprites/floor", "png");
+			sprites[CellType.Wall] = LoadSpriteList("../../../sprites/wall", "png");
+			sprites[CellType.SnakeSegment] = LoadSpriteList("../../../sprites/snake", "png");
+			sprites[CellType.GrowPill] = LoadSpriteList("../../../sprites/pill", "png");
 		}
 	}
 }
