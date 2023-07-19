@@ -114,6 +114,40 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
+		/// Returns any PlayerActions that have been created during this iteration.
+		/// </summary>		
+		/// <returns>The PlayerActions in the order they were created.</returns>		
+		// This method populates the <see cref="keypressBuffer">actionsBuffer</see> class field and returns it, but does not care about its starting contents or its contents once it has returned.
+		public List<PlayerAction> GetPlayerActions()
+		{
+			// To avoid allocating it every game loop, we have a buffer declared as a field and reuse it.
+			actionsBuffer.Clear();
+
+			// Read all pending keys and if they are valid, place them into the actionsBuffer
+			while (Console.KeyAvailable)
+			{
+				ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+				PlayerAction action = keyInfo.Key switch
+				{
+					var k when k == Settings.upKey.console => PlayerAction.Up,
+					var k when k == Settings.downKey.console => PlayerAction.Down,
+					var k when k == Settings.leftKey.console => PlayerAction.Left,
+					var k when k == Settings.rightKey.console => PlayerAction.Right,
+					var k when k == Settings.pauseKey.console => PlayerAction.Pause,
+					var k when k == Settings.quitKey.console => PlayerAction.Quit,
+					_ => PlayerAction.None
+				};
+
+				if (action != PlayerAction.None)
+				{
+					actionsBuffer.Add(action);
+				}
+			}
+
+			return actionsBuffer;
+		}
+
+		/// <summary>
 		/// Prepares the console ready for the board to be drawn for the first time.
 		/// </summary>
 		/// <param name="width">The width of the board in cells</param>
@@ -221,41 +255,5 @@ namespace SimpleSnake
 			Console.ForegroundColor = Settings.textColour.console;
 			Console.Clear();
 		}
-
-		/// <summary>
-		/// Returns any PlayerActions that have been created during this iteration.
-		/// </summary>		
-		/// <returns>The PlayerActions in the order they were created.</returns>		
-		// This method populates the <see cref="keypressBuffer">actionsBuffer</see> class field and returns it, but does not care about its starting contents or its contents once it has returned.
-		public List<PlayerAction> GetPlayerActions()
-		{
-			// To avoid allocating it every game loop, we have a buffer declared as a field and reuse it.
-			actionsBuffer.Clear();
-
-			// Read all pending keys and if they are valid, place them into the actionsBuffer
-			while (Console.KeyAvailable)
-			{
-				ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-				PlayerAction action = keyInfo.Key switch
-				{
-					var k when k == Settings.upKey.console => PlayerAction.Up,
-					var k when k == Settings.downKey.console => PlayerAction.Down,
-					var k when k == Settings.leftKey.console => PlayerAction.Left,
-					var k when k == Settings.rightKey.console => PlayerAction.Right,
-					var k when k == Settings.pauseKey.console => PlayerAction.Pause,
-					var k when k == Settings.quitKey.console => PlayerAction.Quit,
-					_ => PlayerAction.None
-				};
-
-				if (action != PlayerAction.None)
-				{
-					actionsBuffer.Add(action);
-				}
-			}
-
-			return actionsBuffer;
-		}
-
-
 	}
 }

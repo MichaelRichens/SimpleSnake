@@ -127,6 +127,23 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
+		/// Returns any PlayerActions that have been created during this iteration.
+		/// </summary>		
+		/// <returns>The PlayerActions in the order they were created.</returns>	
+		// This method populates the <see cref="keypressBuffer">actionsBuffer</see> class field and returns it, but does not care about its starting contents or its contents once it has returned.
+		public List<PlayerAction> GetPlayerActions()
+		{
+			// Clear out actions from last iteration
+			actionsBuffer.Clear();
+
+			// Run the handlers - populate actionsBuffer from any keypresses placed this iteration
+			window.DispatchEvents();
+
+			// And return them.
+			return actionsBuffer;
+		}
+
+		/// <summary>
 		/// Does any start of game housekeeping needed before the board is first drawn (eg clearing the screen).
 		/// </summary>
 		/// <param name="width">The width of the board in cells</param>
@@ -302,22 +319,6 @@ namespace SimpleSnake
 
 			// Return the selected option.
 			return options[playerChoice];
-		}
-
-		/// <summary>
-		/// Returns any PlayerActions that have been created during this iteration.
-		/// </summary>		
-		/// <returns>The PlayerActions in the order they were created.</returns>		
-		public List<PlayerAction> GetPlayerActions()
-		{
-			// Clear out actions from last iteration
-			actionsBuffer.Clear();
-
-			// Run the handlers - populate actionsBuffer from any keypresses placed this iteration
-			window.DispatchEvents();
-
-			// And return them.
-			return actionsBuffer;
 		}
 
 		/// <summary>
