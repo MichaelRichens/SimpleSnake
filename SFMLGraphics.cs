@@ -361,18 +361,20 @@ namespace SimpleSnake
 			window.MouseButtonPressed += mouseClickHandler;
 			window.MouseMoved += mouseMoveEventHandler;
 
-			// Window loop
+			// Draw menu
+
+			window.Clear(Settings.backgroundColour.sfml);
+
+			foreach (Text text in optionText)
+			{
+				window.Draw(text);
+			}
+
+			window.Display();
+
+			// Wait for user to make choice.
 			while (playerChoice == -1)
 			{
-				window.Clear(Settings.backgroundColour.sfml);
-
-				foreach (Text text in optionText)
-				{
-					window.Draw(text);
-				}
-
-				window.Display();
-
 				window.DispatchEvents();
 			}
 
@@ -383,6 +385,42 @@ namespace SimpleSnake
 
 			// Return the selected option.
 			return options[playerChoice];
+		}
+
+		/// <summary>
+		/// Pauses the game until a key is pressed.  If that key is the quit game key, return true, otherwise return false.
+		/// </summary>
+		/// <returns>True if the game should exit, false otherwise.</returns>
+		public bool PauseGameWithExitOption()
+		{
+			// Remove main keypress handler
+			window.KeyPressed -= InGameKeypressHandler;
+
+			// Add an dedicated unpause handler to handle keypresses while paused
+			bool unPause = false;
+			bool quitGame = false;
+			void pauseHandler(object? sender, KeyEventArgs e)
+			{
+				unPause = true;
+				if (e.Code == Settings.quitKey.sfml)
+				{
+					quitGame = true;
+				}
+			}
+			window.KeyPressed += pauseHandler;
+
+			// Loop on dispatch events until keypress handler unpauses
+			while (!unPause)
+			{
+				window.DispatchEvents();
+			}
+
+			// Restore keypress handlers to original state.
+			window.KeyPressed -= pauseHandler;
+			window.KeyPressed += InGameKeypressHandler;
+
+			// Return whether this should be treated as a game exit.
+			return quitGame;
 		}
 
 		/// <summary>

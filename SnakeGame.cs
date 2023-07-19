@@ -106,11 +106,10 @@ namespace SimpleSnake
 					if (actions[i] == PlayerAction.Pause && i == actions.Count - 1)
 					{
 						loopTimer.Stop();
-						ConsoleKeyInfo unpauseKey = Console.ReadKey(true); // Blocks until keypress.
+						bool quitGameAfterPause = graphicsMode.PauseGameWithExitOption();
 						loopTimer.Start();
 
-						// If the user pressed the quit key, assume they wanted to quit rather than unpause.
-						if (unpauseKey.Key == Settings.quitKey.console)
+						if (quitGameAfterPause)
 						{
 							endGame = true;
 						}

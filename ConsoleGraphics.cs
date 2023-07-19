@@ -247,6 +247,22 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
+		/// Pauses the game until a key is pressed.  If that key is the quit game key, return true, otherwise return false.
+		/// </summary>
+		/// <returns>True if the game should exit, false otherwise.</returns>
+		public bool PauseGameWithExitOption()
+		{
+			ConsoleKeyInfo unpauseKey = Console.ReadKey(true); // Blocks until keypress.
+
+			if (unpauseKey.Key == Settings.quitKey.console)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
 		/// Clear the console and reset colours ready for text output.
 		/// </summary>
 		public void PostPlayCleanup()

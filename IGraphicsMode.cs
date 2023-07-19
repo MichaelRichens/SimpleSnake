@@ -34,6 +34,12 @@ namespace SimpleSnake
 		public TEnum MenuFromEnum<TEnum>(Dictionary<TEnum, string> enumTextLookup) where TEnum : struct, Enum;
 
 		/// <summary>
+		/// Pauses the game until suitable unpause action is made.  Returns a boolean to say whether the unpasue should also be treated as a game exit.
+		/// </summary>
+		/// <returns>True if the game should exit, false otherwise.</returns>
+		public bool PauseGameWithExitOption();
+
+		/// <summary>
 		/// Called immediately after a game is over to revert any changes made to the graphics system for it.
 		/// </summary>
 		public void PostPlayCleanup();
