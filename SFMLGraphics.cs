@@ -159,7 +159,7 @@ namespace SimpleSnake
 					if (cellType != spriteIndex.cellType || spriteIndex.index == -1)
 					{
 						// If not, pick one at random
-						spriteIndex = new(cellType, rng.Next(sprites[cellType].Count));
+						spriteIndex = new CellSpriteIndex(cellType, rng.Next(sprites[cellType].Count));
 						cellSpriteIndex[i, j] = spriteIndex;
 					}
 					// And use this sprite
