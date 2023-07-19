@@ -89,7 +89,7 @@ namespace SimpleSnake
 				for (int i = 0; i < actions.Count; i++)
 				{
 					// Calculate any move orders based on the last pending move order entered, and if this is a valid move order, add it to the pendingMoves to make.
-					Direction lastDirection = pendingMoves.Count == 0 ? snake.direction : pendingMoves[pendingMoves.Count - 1];
+					Direction lastDirection = pendingMoves.Count == 0 ? snake.direction : pendingMoves[^1];
 					Direction nextDirection = GetNewDirection(lastDirection, actions[i]);
 					if (nextDirection != lastDirection)
 					{
