@@ -77,20 +77,23 @@ namespace SimpleSnake
 				// Output the current state of the board.
 				board.Draw();
 
-				// Handle player keypress.
-				if (graphicsMode.TryGetPlayerAction(out PlayerAction action))
+				// Get any player actions placed in the buffer during the last iteration
+				List<PlayerAction> actions = graphicsMode.GetPlayerActions();
+
+				// Process player actions in the order they were made.
+				for (int i = 0; i < actions.Count; i++)
 				{
 					// Handle player changing the snake's direction.
-					snake.direction = GetNewDirection(snake.direction, action);
+					snake.direction = GetNewDirection(snake.direction, actions[i]);
 
 					// Handle player quitting.
-					if (action == PlayerAction.Quit)
+					if (actions[i] == PlayerAction.Quit)
 					{
 						endGame = true;
 					}
 
-					// Handle the player pausing.
-					if (action == PlayerAction.Pause)
+					// Handle the player pausing, but ignore it if it isn't the last action in the buffer.
+					if (actions[i] == PlayerAction.Pause && i == actions.Count - 1)
 					{
 						loopTimer.Stop();
 						ConsoleKeyInfo unpauseKey = Console.ReadKey(true); // Blocks until keypress.

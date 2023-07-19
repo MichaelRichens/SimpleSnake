@@ -39,10 +39,9 @@ namespace SimpleSnake
 		public void PostPlayCleanup();
 
 		/// <summary>
-		/// This method returns a bool indicating whether there is a new game action performed by the player, and if so provides it as a PlayerAction out parameter.
-		/// </summary>
-		/// <param name="action">Out parameter. The new action input by the player.</param>
-		/// <returns>True if a new action was found, false otherwise.</returns>		
-		public bool TryGetPlayerAction(out PlayerAction action);
+		/// Returns any PlayerActions that have been created during this iteration.
+		/// </summary>		
+		/// <returns>The PlayerActions in the order they were created.</returns>		
+		public List<PlayerAction> GetPlayerActions();
 	}
 }

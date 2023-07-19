@@ -35,6 +35,11 @@ namespace SimpleSnake
 		private static readonly int nativeSpriteSize = 20;
 
 		/// <summary>
+		/// This field is a buffer used by the <see cref="GetPlayerActions" /> method, declared as a class field and reused to avoid frequent allocations.
+		/// </summary>
+		private readonly List<PlayerAction> actionsBuffer = new(5);
+
+		/// <summary>
 		/// The font used for text output.
 		/// </summary>
 		private readonly Font font;
@@ -43,11 +48,6 @@ namespace SimpleSnake
 		/// The title text to appear above the game board.
 		/// </summary>
 		private Text gameBoardHeading;
-
-		/// <summary>
-		/// This is used by the window keypress handler that is set while a game is running to store a value for TryGetPlayerAction.
-		/// </summary>
-		private PlayerAction lastAction = PlayerAction.None;
 
 		/// <summary>
 		/// The sprites available for each CellType.
@@ -305,19 +305,19 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// This method returns a bool indicating whether there is a new game action performed by the player, and if so provides it as a PlayerAction out parameter.
-		/// </summary>
-		/// <param name="action">Out parameter. The new action input by the player.</param>
-		/// <returns>True if a new action was found, false otherwise.</returns>		
-		public bool TryGetPlayerAction(out PlayerAction action)
+		/// Returns any PlayerActions that have been created during this iteration.
+		/// </summary>		
+		/// <returns>The PlayerActions in the order they were created.</returns>		
+		public List<PlayerAction> GetPlayerActions()
 		{
+			// Clear out actions from last iteration
+			actionsBuffer.Clear();
+
+			// Run the handlers - populate actionsBuffer from any keypresses placed this iteration
 			window.DispatchEvents();
 
-			action = lastAction;
-			// This has been processed, so set it to None
-			lastAction = PlayerAction.None;
-
-			return action != PlayerAction.None;
+			// And return them.
+			return actionsBuffer;
 		}
 
 		/// <summary>
@@ -330,10 +330,8 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// This handler is called for every keypress in the order that they were placed, when window.DispatchEvents() is called by <see cref="TryGetPlayerAction" />.
-		/// It records the PlayerAction the keypress translates to in <see cref="lastAction" />.
-		/// Which will end up with the action from the last valid key pressed being stored there.
-		/// It will not overwrite a value that is not PlayerAction.None with PlayerAction.None (so if a valid key is followed by an invalid one in the same iteration, it will not overwrite it).  
+		/// This handler is called for every keypress in the order that they were placed, when window.DispatchEvents() is called by <see cref="GetPlayerActions" />.
+		/// It adds any valid actions the the keypress translates to into <see cref="actionsBuffer" />.				
 		/// </summary>
 		/// <param name="sender">Not used.</param>
 		/// <param name="e">The KeyEventArgs object.</param>
@@ -352,7 +350,7 @@ namespace SimpleSnake
 
 			if (action != PlayerAction.None)
 			{
-				lastAction = action;
+				actionsBuffer.Add(action);
 			}
 		}
 
