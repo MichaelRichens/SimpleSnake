@@ -28,6 +28,11 @@ namespace SimpleSnake
 		private readonly IGraphicsMode graphicsMode;
 
 		/// <summary>
+		/// Used to store moves that are entered - multiple moves can be entered in the same game loop iteration that need to be applied across multiple iterations, these get stored here.
+		/// </summary>
+		private readonly List<Direction> pendingMoves = new();
+
+		/// <summary>
 		/// The delay between game updates in ms
 		/// </summary>
 		private int Delay { get; }
@@ -80,15 +85,16 @@ namespace SimpleSnake
 				// Get any player actions placed in the buffer during the last iteration
 				List<PlayerAction> actions = graphicsMode.GetPlayerActions();
 
-				// Temp variable for changes of direction to be applied to in the order they were made
-				Direction newDirection = snake.direction;
-
 				// Process player actions in the order they were made.
 				for (int i = 0; i < actions.Count; i++)
 				{
-					// Apply any changes of direction.  Using the original direction as the decider for whether it is a legal move as not, not the direction the snake would have been travelling in if the previous key had already been applied.
-					// This prevents the snake turning back on itself 180 degrees.
-					newDirection = GetNewDirection(snake.direction, actions[i]);
+					// Calculate any move orders based on the last pending move order entered, and if this is a valid move order, add it to the pendingMoves to make.
+					Direction lastDirection = pendingMoves.Count == 0 ? snake.direction : pendingMoves[pendingMoves.Count - 1];
+					Direction nextDirection = GetNewDirection(lastDirection, actions[i]);
+					if (nextDirection != lastDirection)
+					{
+						pendingMoves.Add(nextDirection);
+					}
 
 					// Handle player quitting.
 					if (actions[i] == PlayerAction.Quit)
@@ -111,8 +117,14 @@ namespace SimpleSnake
 					}
 				}
 
-				// Apply the final direction, calculated after all updates have been applied in order
-				snake.direction = newDirection;
+				// Apply a single pending move order - any further orders will be applied next iteration (before any orders entered then are applied).
+				// Only allowing a single move execution per iteration, but preservbing subsequent moves, allows the player to quickly enter two moves and have them execute in sequence as they would expect.
+				// If moves are not saved across iterations, this would either result in one of the moves being discarded, or the snake only applying the resulting move (potentially doubling back on itself within a single iteration and being killed).
+				if (pendingMoves.Count > 0)
+				{
+					snake.direction = pendingMoves[0];
+					pendingMoves.RemoveAt(0);
+				}
 
 				// Place the snake head in the next position
 				snake.AdvanceHead();
