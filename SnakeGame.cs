@@ -32,6 +32,8 @@ namespace SimpleSnake
 		/// </summary>
 		private readonly List<Direction> pendingMoves = new();
 
+		private readonly long sessionHighScore;
+
 		/// <summary>
 		/// The delay between game updates in ms
 		/// </summary>
@@ -49,9 +51,11 @@ namespace SimpleSnake
 		/// <param name="height">The height of the game board in cells.</param>
 		/// <param name="delay">The delay between game updates in ms.</param>
 		/// <param name="graphicsMode">Provide an IGraphicsMode implementor to display the graphics.</param>
-		internal SnakeGame(int width, int height, int startingLength, Direction startingDirection, int delay, IGraphicsMode graphicsMode)
+		internal SnakeGame(int width, int height, int startingLength, Direction startingDirection, int delay, long sessionHighScore, IGraphicsMode graphicsMode)
 		{
 			this.graphicsMode = graphicsMode;
+
+			this.sessionHighScore = sessionHighScore;
 
 			Delay = delay;
 

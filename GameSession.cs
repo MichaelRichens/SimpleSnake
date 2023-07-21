@@ -16,6 +16,8 @@ namespace SimpleSnake
 		/// </summary>
 		private readonly IGraphicsMode graphicsMode;
 
+		private long sessionHighScore = 0;
+
 		/// <summary>
 		/// Creates a new instance of the game session, configured with the desired GraphicsMode.
 		/// </summary>
@@ -37,9 +39,14 @@ namespace SimpleSnake
 				choice = graphicsMode.MenuFromEnum<MainMenuOption>(TextStrings.MainMenu);
 				if (choice == MainMenuOption.Play)
 				{
-					var game = new SnakeGame(Settings.defaultWidth, Settings.defaultHeight, Settings.startingLength, Settings.startingDirection, Settings.defaultDelay, graphicsMode);
+					var game = new SnakeGame(Settings.defaultWidth, Settings.defaultHeight, Settings.startingLength, Settings.startingDirection, Settings.defaultDelay, sessionHighScore, graphicsMode);
 					game.Play();
 					graphicsMode.PostPlayCleanup();
+
+					if (game.GameResults.Score > sessionHighScore)
+					{
+						sessionHighScore = game.GameResults.Score;
+					}
 				}
 			} while (choice != MainMenuOption.Quit);
 
