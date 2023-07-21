@@ -16,6 +16,9 @@ namespace SimpleSnake
 		/// </summary>
 		private readonly IGraphicsMode graphicsMode;
 
+		/// <summary>
+		/// Stores the highest score of all games played under this instance of GameSession.
+		/// </summary>
 		private long sessionHighScore = 0;
 
 		/// <summary>

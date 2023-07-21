@@ -32,6 +32,9 @@ namespace SimpleSnake
 		/// </summary>
 		private readonly List<Direction> pendingMoves = new();
 
+		/// <summary>
+		/// Stores the high score for this session, provided when instance was created.
+		/// </summary>
 		private readonly long sessionHighScore;
 
 		/// <summary>
