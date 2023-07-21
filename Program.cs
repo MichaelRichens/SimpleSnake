@@ -17,18 +17,9 @@ namespace SimpleSnake
 
 			IGraphicsMode graphicsMode = useConsole ? new ConsoleGraphics() : new SFMLGraphics();
 
-			MainMenuOption choice;
+			GameSession gameSession = new(graphicsMode);
 
-			do
-			{
-				choice = graphicsMode.MenuFromEnum<MainMenuOption>(TextStrings.MainMenu);
-				if (choice == MainMenuOption.Play)
-				{
-					var game = new SnakeGame(Settings.defaultWidth, Settings.defaultHeight, Settings.startingLength, Settings.startingDirection, Settings.defaultDelay, graphicsMode);
-					game.Play();
-					graphicsMode.PostPlayCleanup();
-				}
-			} while (choice != MainMenuOption.Quit);
+			gameSession.MainMenu();
 		}
 	}
 }
