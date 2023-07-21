@@ -44,7 +44,7 @@ namespace SimpleSnake
 			} while (choice != MainMenuOption.Quit);
 
 			// Game session is over and the player has chosen to quit.
-			// There is the ability to quit the game via Environment.Exit(), so reaching this point is not gauranteed.
+			// There is the ability to quit the game via Environment.Exit(), so reaching this point is not guaranteed.
 		}
 	}
 }
