@@ -40,9 +40,29 @@ namespace SimpleSnake
 		private readonly List<PlayerAction> actionsBuffer = new(5);
 
 		/// <summary>
+		/// The height in pixels to use for a blank line.
+		/// </summary>
+		private readonly float blankSpaceLineSize = 10;
+
+		/// <summary>
+		/// Stores the location in pixels in the window where the board cells should start being drawn.
+		/// </summary>
+		private readonly Vector2f boardDisplayOrigin;
+
+		/// <summary>
 		/// The font used for text output.
 		/// </summary>
 		private readonly Font font;
+
+		/// <summary>
+		/// The font size in pixels of the title.
+		/// </summary>
+		private readonly uint fontSizeTitle = 20;
+
+		/// <summary>
+		/// The font size in pixels of the score display text.
+		/// </summary>
+		private readonly uint fontSizeScore = 40;
 
 		/// <summary>
 		/// The title text to appear above the game board.
@@ -53,6 +73,11 @@ namespace SimpleSnake
 		/// Random number generator.
 		/// </summary>
 		private readonly Random rng = new();
+
+		/// <summary>
+		/// The title text to appear to the left of the player's score.
+		/// </summary>
+		private readonly Text scoreTitle;
 
 		/// <summary>
 		/// The sprites available for each CellType.
@@ -80,7 +105,16 @@ namespace SimpleSnake
 
 			LoadSprites();
 
-			gameBoardHeading = new Text(TextStrings.GameBoardHeading(Settings.pauseKey.sfml, Settings.quitKey.sfml), font, 20);
+			// Create and configure up text elements that will be used by DrawBoard
+			gameBoardHeading = new Text(TextStrings.GameBoardHeading(Settings.pauseKey.sfml, Settings.quitKey.sfml), font, fontSizeTitle);
+			gameBoardHeading.FillColor = Settings.textColour.sfml;
+			gameBoardHeading.Position = new Vector2f(10, blankSpaceLineSize);
+
+			scoreTitle = new Text(TextStrings.scoreTitle, font, fontSizeScore);
+			scoreTitle.FillColor = Settings.textColour.sfml;
+			scoreTitle.Position = new Vector2f(blankSpaceLineSize, gameBoardHeading.Position.Y + fontSizeTitle + blankSpaceLineSize);
+
+			boardDisplayOrigin = new Vector2f(blankSpaceLineSize, scoreTitle.Position.Y + fontSizeScore + blankSpaceLineSize);
 
 			window.Clear(Settings.backgroundColour.sfml);
 
@@ -136,16 +170,23 @@ namespace SimpleSnake
 		/// <summary>
 		/// The DrawBoard method is passed a 2D cells array, and displays it to the user.
 		/// </summary>
-		/// <param name="cells"></param>
-		public void DrawBoard(Cell[,] cells)
+		/// <param name="cells">The cells array representation of the game board.</param>
+		/// <param name="gameResults">The GameResult object for the game in progress.</param>
+		public void DrawBoard(Cell[,] cells, GameResults gameResults)
 		{
 			window.Clear(Settings.backgroundColour.sfml);
 
+			// Draw fixed title elements
 			window.Draw(gameBoardHeading);
+			window.Draw(scoreTitle);
 
-			float boardTop = gameBoardHeading.GetGlobalBounds().Top + gameBoardHeading.GetGlobalBounds().Height + 10;
+			// Create and draw score
+			Text scoreText = new(gameResults.Score.ToString("N0"), font, fontSizeScore);
+			scoreText.FillColor = Settings.scoreColour.sfml;
+			scoreText.Position = new Vector2f(scoreTitle.Position.X + scoreTitle.GetGlobalBounds().Width, scoreTitle.Position.Y);
+			window.Draw(scoreText);
 
-			float boardLeft = 20;
+			// draw board
 
 			for (int i = 0; i < cells.GetLength(0); i++)
 			{
@@ -170,7 +211,7 @@ namespace SimpleSnake
 
 					sprite.Color = GetCellColour(cellType);
 
-					sprite.Position = new Vector2f(j * cellSize + boardLeft, i * cellSize + boardTop);
+					sprite.Position = new Vector2f(j * cellSize + boardDisplayOrigin.X, i * cellSize + boardDisplayOrigin.Y);
 
 					window.Draw(sprite);
 				}

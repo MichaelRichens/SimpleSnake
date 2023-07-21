@@ -14,8 +14,9 @@ namespace SimpleSnake
 		/// <summary>
 		/// The DrawBoard method is passed a 2D cells array, and displays it to the user.
 		/// </summary>
-		/// <param name="cells"></param>
-		public void DrawBoard(Cell[,] cells);
+		/// <param name="cells">The cells array representation of the game board.</param>
+		/// <param name="gameResults">The GameResult object for the game in progress.</param>
+		public void DrawBoard(Cell[,] cells, GameResults gameResults);
 
 		/// <summary>
 		/// Does any start of game housekeeping needed before the board is first drawn (eg clearing the screen).

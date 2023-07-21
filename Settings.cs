@@ -25,6 +25,7 @@ namespace SimpleSnake
 		internal static readonly Colour sceneryColour = new(ConsoleColor.White, Color.White);
 		internal static readonly Colour snakeColour = new(ConsoleColor.Blue, Color.Blue);
 		internal static readonly Colour textColour = new(ConsoleColor.White, Color.White);
+		internal static readonly Colour scoreColour = new(ConsoleColor.Yellow, Color.Yellow);
 
 		// Default game board size
 		internal static int defaultWidth = 70;
@@ -41,6 +42,6 @@ namespace SimpleSnake
 		internal static readonly int pillGrowAmount = 10;
 
 		// How much to multiply the reciprocal of the delay by to get the score awarded each tick.
-		internal static readonly int scoreMultipler = 1000;
+		internal static readonly int scoreMultipler = 100;
 	}
 }

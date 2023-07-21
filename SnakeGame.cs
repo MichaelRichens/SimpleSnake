@@ -90,7 +90,7 @@ namespace SimpleSnake
 				GameResults.TickUpScore(Delay, snake.length);
 
 				// Output the current state of the board.
-				board.Draw();
+				board.Draw(GameResults);
 
 				// Get any player actions placed in the buffer during the last iteration
 				List<PlayerAction> actions = graphicsMode.GetPlayerActions();

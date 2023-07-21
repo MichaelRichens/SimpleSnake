@@ -81,8 +81,19 @@ namespace SimpleSnake
 		/// <summary>
 		/// Draws the board to the Console.
 		/// </summary>
-		public void DrawBoard(Cell[,] cells)
+		/// <param name="cells">The cells array representation of the game board.</param>
+		/// <param name="gameResults">The GameResult object for the game in progress.</param>
+		public void DrawBoard(Cell[,] cells, GameResults gameResults)
 		{
+			// Output the score (changes every tick)
+			// Since score never goes down it will never occupy less space, so we don't worry about clearing the previous score and just overwrite.
+			Console.ForegroundColor = Settings.textColour.console;
+			Console.SetCursorPosition(gameOriginCursor.x, gameOriginCursor.y);
+			Console.Write(TextStrings.scoreTitle);
+			Console.ForegroundColor = Settings.scoreColour.console;
+			Console.Write(gameResults.Score.ToString("N0"));
+			int spaceForScore = 2; // leave a line for the score and a blank line below it.
+
 			int height = cells.GetLength(0);
 			int width = cells.GetLength(1);
 
@@ -101,7 +112,7 @@ namespace SimpleSnake
 				{
 					if (cells[i, j].cellType != prevCells[i, j].cellType)
 					{
-						Console.SetCursorPosition(gameOriginCursor.x + j, gameOriginCursor.y + i);
+						Console.SetCursorPosition(gameOriginCursor.x + j, gameOriginCursor.y + spaceForScore + i);
 						Console.ForegroundColor = GetCellColour(cells[i, j].cellType);
 						Console.WriteLine(GetCellChar(cells[i, j].cellType));
 					}

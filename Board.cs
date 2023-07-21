@@ -97,9 +97,10 @@ namespace SimpleSnake
 		/// <summary>
 		/// Draws the current state of the board using the IGraphicsMode instance that was injected at construction.
 		/// </summary>
-		internal void Draw()
+		/// <param name="gameResults">The GameResult object for the game in progress.</param>
+		internal void Draw(GameResults gameResults)
 		{
-			graphicsMode.DrawBoard(cells);
+			graphicsMode.DrawBoard(cells, gameResults);
 		}
 
 		internal void ChangeSnakeLength(int amount)

@@ -9,7 +9,7 @@ namespace SimpleSnake
 	/// <summary>
 	/// Class to hold and modify any results from the game that need to be passed back - score basically.
 	/// </summary>
-	class GameResults
+	public class GameResults
 	{
 		/// <summary>
 		/// Backing value for Score property.

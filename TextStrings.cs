@@ -28,5 +28,7 @@ namespace SimpleSnake
 			{ MainMenuOption.Play, "Start Game" },
 			{ MainMenuOption.Quit, "Exit Game" },
 		};
+
+		internal static string scoreTitle = "Score: ";
 	}
 }
