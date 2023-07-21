@@ -23,7 +23,7 @@ namespace SimpleSnake
 		/// </summary>
 		/// <param name="width">The width of the board in cells</param>
 		/// <param name="height">The height of the board in cells.</param>
-		public void InitBoard(int width, int height);
+		public void InitBoard(int width, int height, GameResults gameResults);
 
 		/// <summary>
 		/// Method for displaying a menu to the player, and getting a choice from all the options in the enum type parameter that is passed.  Display text for the options is passed in as a dictionary.

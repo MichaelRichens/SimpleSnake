@@ -163,7 +163,7 @@ namespace SimpleSnake
 		/// </summary>
 		/// <param name="width">The width of the board in cells</param>
 		/// <param name="height">The height of the board in cells.</param>
-		public void InitBoard(int width, int height)
+		public void InitBoard(int width, int height, GameResults gameResults)
 		{
 			// Create a prevCells array populated by Empty cells ready for the first call of the Draw method.
 			prevCells = new Cell[width, height];
@@ -172,9 +172,9 @@ namespace SimpleSnake
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
 				// Check that the window is large enough, and enlarge it if not.  units are characters.
-				// Lets say we want 5 chars extra in each dimension.
-				int minWidth = width + 5;
-				int minHeight = height + 5;
+				// Lets say we want 10 chars extra in each dimension.
+				int minWidth = width + 10;
+				int minHeight = height + 10;
 
 				if (minWidth < Console.WindowWidth || minHeight < Console.WindowHeight)
 				{
@@ -197,9 +197,12 @@ namespace SimpleSnake
 				}
 			}
 
-			// Clear screnn and write header text.
+			// Clear screan and write header text.
 			Console.Clear();
 			Console.WriteLine(TextStrings.GameBoardHeading(Settings.pauseKey.console, Settings.quitKey.console));
+			Console.Write(TextStrings.highSoreSessionTitle);
+			Console.ForegroundColor = Settings.scoreColour.console;
+			Console.WriteLine(gameResults.SessionHighScore.ToString("N0"));
 			Console.WriteLine();
 
 			// Store where the cursor is so that the game can be drawn below it (and to the right of it if we want a side menu).

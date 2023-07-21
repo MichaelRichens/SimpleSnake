@@ -128,9 +128,9 @@ namespace SimpleSnake
 		/// <summary>
 		/// Prepares the graphics mode ready for the board to first be drawn.
 		/// </summary>
-		internal void InitBoard()
+		internal void InitBoard(GameResults gameResults)
 		{
-			graphicsMode.InitBoard(Width, Height);
+			graphicsMode.InitBoard(Width, Height, gameResults);
 		}
 
 		/// <summary>

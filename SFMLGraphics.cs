@@ -242,7 +242,7 @@ namespace SimpleSnake
 		/// </summary>
 		/// <param name="width">The width of the board in cells</param>
 		/// <param name="height">The height of the board in cells.</param>
-		public void InitBoard(int width, int height)
+		public void InitBoard(int width, int height, GameResults gameResults)
 		{
 			// check window is large enough to fit game board, and expand it if not
 			// Let's say we want 200px in each dimension larger than it takes to display the board.
