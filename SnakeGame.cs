@@ -33,11 +33,6 @@ namespace SimpleSnake
 		private readonly List<Direction> pendingMoves = new();
 
 		/// <summary>
-		/// Stores the high score for this session, provided when instance was created.
-		/// </summary>
-		private readonly long sessionHighScore;
-
-		/// <summary>
 		/// The delay between game updates in ms
 		/// </summary>
 		private int Delay { get; }
@@ -58,15 +53,13 @@ namespace SimpleSnake
 		{
 			this.graphicsMode = graphicsMode;
 
-			this.sessionHighScore = sessionHighScore;
-
 			Delay = delay;
 
 			GameResults = new GameResults();
 
 			snake = new Snake(startingLength, startingDirection, width / 2, height / 2);
 
-			board = new Board(width, height, snake.HeadX, snake.HeadY, snake.length, graphicsMode);
+			board = new Board(width, height, snake.HeadX, snake.HeadY, snake.length, sessionHighScore, graphicsMode);
 		}
 
 		/// <summary>
