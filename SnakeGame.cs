@@ -8,7 +8,7 @@ using System.Threading;
 namespace SimpleSnake
 {
 	/// <summary>
-	/// The SnakeGame class represents an individual game of Snake.
+	/// The SnakeGame class represents an individual game of Snake - the Play method starts the game, and should only be called once.
 	/// </summary>
 	class SnakeGame
 	{
@@ -38,6 +38,11 @@ namespace SimpleSnake
 		private int Delay { get; }
 
 		/// <summary>
+		/// Holds information that needs to survive the game (the score basically).
+		/// </summary>
+		public GameResults GameResults { get; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="SnakeGame"/> class.
 		/// </summary>
 		/// <param name="width">The width of the game board in cells.</param>
@@ -49,6 +54,8 @@ namespace SimpleSnake
 			this.graphicsMode = graphicsMode;
 
 			Delay = delay;
+
+			GameResults = new GameResults();
 
 			snake = new Snake(startingLength, startingDirection, width / 2, height / 2);
 
@@ -78,6 +85,9 @@ namespace SimpleSnake
 				// Keep track of the time it takes to execute the loop so that we can have a consistent delay between iterations.
 				loopTimer.Reset();
 				loopTimer.Start();
+
+				// Award score
+				GameResults.TickUpScore(Delay, snake.length);
 
 				// Output the current state of the board.
 				board.Draw();

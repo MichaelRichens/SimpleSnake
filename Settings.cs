@@ -39,5 +39,8 @@ namespace SimpleSnake
 
 		// How many cells the snake grows when eating a pill.
 		internal static readonly int pillGrowAmount = 10;
+
+		// How much to multiply the reciprocal of the delay by to get the score awarded each tick.
+		internal static readonly int scoreMultipler = 1000;
 	}
 }
