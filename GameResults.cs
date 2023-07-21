@@ -22,9 +22,17 @@ namespace SimpleSnake
 		public long Score { get => score; }
 
 		/// <summary>
+		/// Gets the highest score achieved this session.
+		/// </summary>
+		public long SessionHighScore { get; }
+
+		/// <summary>
 		/// Constructs a new instance of game result.
 		/// </summary>
-		public GameResults() { }
+		public GameResults(long sessionHighScore)
+		{
+			SessionHighScore = sessionHighScore;
+		}
 
 		/// <summary>
 		/// Applies an increase in the game score - intended to be run every game tick.  Calculated based on the game delay (lower delay means higher score).

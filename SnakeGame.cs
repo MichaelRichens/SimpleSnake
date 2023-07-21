@@ -55,11 +55,11 @@ namespace SimpleSnake
 
 			Delay = delay;
 
-			GameResults = new GameResults();
+			GameResults = new GameResults(sessionHighScore);
 
 			snake = new Snake(startingLength, startingDirection, width / 2, height / 2);
 
-			board = new Board(width, height, snake.HeadX, snake.HeadY, snake.length, sessionHighScore, graphicsMode);
+			board = new Board(width, height, snake.HeadX, snake.HeadY, snake.length, graphicsMode);
 		}
 
 		/// <summary>

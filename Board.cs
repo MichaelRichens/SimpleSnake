@@ -36,11 +36,6 @@ namespace SimpleSnake
 		private readonly Random rng = new();
 
 		/// <summary>
-		/// Stores the high score for this session, provided when instance was created.
-		/// </summary>
-		private readonly long sessionHighScore;
-
-		/// <summary>
 		/// The height of the board in characters
 		/// </summary>
 		internal int Height { get; }
@@ -59,7 +54,7 @@ namespace SimpleSnake
 		/// <param name="snakeStartY">The vertical cell to start the snake (measured from the top).</param>
 		/// <param name="snakeLength">The starting length of the snake.</param>
 		/// <param name="graphicsMode">Provide an IGraphicsMode implementor to display the graphics.</param>
-		internal Board(int width, int height, int snakeStartX, int snakeStartY, int snakeLength, long sessionHighScore, IGraphicsMode graphicsMode)
+		internal Board(int width, int height, int snakeStartX, int snakeStartY, int snakeLength, IGraphicsMode graphicsMode)
 		{
 			this.graphicsMode = graphicsMode;
 
