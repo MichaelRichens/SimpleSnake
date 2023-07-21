@@ -26,14 +26,18 @@ namespace SimpleSnake
 		internal static readonly Colour snakeColour = new(ConsoleColor.Blue, Color.Blue);
 		internal static readonly Colour textColour = new(ConsoleColor.White, Color.White);
 
+		// Default game board size
 		internal static int defaultWidth = 70;
 		internal static int defaultHeight = 50;
 
+		// Default game loop delay (in ms) - the length in ms targetted between frames (the snake moves 1 square per frame). 
 		internal static int defaultDelay = 70;
 
+		// Default stats for the snake.
 		internal static readonly Direction startingDirection = Direction.Right;
 		internal static readonly int startingLength = 20;
 
+		// How many cells the snake grows when eating a pill.
 		internal static readonly int pillGrowAmount = 10;
 	}
 }
