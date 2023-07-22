@@ -106,13 +106,17 @@ namespace SimpleSnake
 			LoadSprites();
 
 			// Create and configure text elements that will be used by DrawBoard
-			gameBoardHeading = new Text(TextStrings.GameBoardHeading(Settings.pauseKey.sfml, Settings.quitKey.sfml), font, fontSizeTitle);
-			gameBoardHeading.FillColor = Settings.textColour.sfml;
-			gameBoardHeading.Position = new Vector2f(10, blankSpaceLineSize);
+			gameBoardHeading = new Text(TextStrings.GameBoardHeading(Settings.pauseKey.sfml, Settings.quitKey.sfml), font, fontSizeTitle)
+			{
+				FillColor = Settings.textColour.sfml,
+				Position = new Vector2f(10, blankSpaceLineSize)
+			};
 
-			scoreTitle = new Text(TextStrings.scoreTitle, font, fontSizeScore);
-			scoreTitle.FillColor = Settings.textColour.sfml;
-			scoreTitle.Position = new Vector2f(blankSpaceLineSize, gameBoardHeading.Position.Y + fontSizeTitle + blankSpaceLineSize);
+			scoreTitle = new Text(TextStrings.scoreTitle, font, fontSizeScore)
+			{
+				FillColor = Settings.textColour.sfml,
+				Position = new Vector2f(blankSpaceLineSize, gameBoardHeading.Position.Y + fontSizeTitle + blankSpaceLineSize)
+			};
 
 			boardDisplayOrigin = new Vector2f(blankSpaceLineSize, scoreTitle.Position.Y + fontSizeScore + blankSpaceLineSize);
 
@@ -181,9 +185,11 @@ namespace SimpleSnake
 			window.Draw(scoreTitle);
 
 			// Create and draw score
-			Text scoreText = new(gameResults.Score.ToString("N0"), font, fontSizeScore);
-			scoreText.FillColor = Settings.scoreColour.sfml;
-			scoreText.Position = new Vector2f(scoreTitle.Position.X + scoreTitle.GetGlobalBounds().Width, scoreTitle.Position.Y);
+			Text scoreText = new(gameResults.Score.ToString("N0"), font, fontSizeScore)
+			{
+				FillColor = Settings.scoreColour.sfml,
+				Position = new Vector2f(scoreTitle.Position.X + scoreTitle.GetGlobalBounds().Width, scoreTitle.Position.Y)
+			};
 			window.Draw(scoreText);
 
 			// draw board
