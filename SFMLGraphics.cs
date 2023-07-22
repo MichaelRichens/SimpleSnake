@@ -140,7 +140,7 @@ namespace SimpleSnake
 		};
 
 		/// <summary>
-		/// Helper function that returns a List of sprites when passed the file name and extension.  It creates sprites from all sprites found with that name followed by an incrementing integer.
+		/// Helper function that returns a List of sprites when passed the file name and extension.  It creates sprites from all files found with that name followed by an incrementing integer.
 		/// I.e /path/to/fileX.ext where X is a series of numbers starting with 0.
 		/// </summary>
 		/// <param name="fileNameStart">The path and filename up to the point where the incrementing integer is inserted.</param>
