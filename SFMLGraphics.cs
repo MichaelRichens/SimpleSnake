@@ -105,7 +105,7 @@ namespace SimpleSnake
 
 			LoadSprites();
 
-			// Create and configure up text elements that will be used by DrawBoard
+			// Create and configure text elements that will be used by DrawBoard
 			gameBoardHeading = new Text(TextStrings.GameBoardHeading(Settings.pauseKey.sfml, Settings.quitKey.sfml), font, fontSizeTitle);
 			gameBoardHeading.FillColor = Settings.textColour.sfml;
 			gameBoardHeading.Position = new Vector2f(10, blankSpaceLineSize);
