@@ -60,7 +60,7 @@ namespace SimpleSnake
 
 			do
 			{
-				choice = graphicsMode.MenuFromEnum<MainMenuOption>(TextStrings.MainMenu);
+				choice = graphicsMode.Menu<MainMenuOption>(TextStrings.MainMenu);
 				if (choice == MainMenuOption.Play)
 				{
 					// Play a game.

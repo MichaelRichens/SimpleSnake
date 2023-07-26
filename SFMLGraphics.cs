@@ -334,31 +334,25 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// A utility function for displaying a menu to the player inside the instance's window, and getting a choice from all the options in the enum type parameter that is passed.  Either by keypress or mouse click.
-		/// Text for the options is passed in as a dictionary.
+		/// A utility function for displaying a menu to the player inside the instance's window, and getting a choice from all the options in the passed dictionary.  The dictionary is keyed with an enum, the type of which is passed as a stype parameter.
 		/// </summary>
-		/// <typeparam name="TEnum">The enum representing the options to be presented to the player.</typeparam>
-		/// <param name="enumTextLookup">A dictionary containing each of these options as a key, with the value being a string with the text to display.</param>
+		/// <typeparam name="TEnum">The enum class used for the options to be presented to the player.</typeparam>
+		/// <param name="menuOptions">A dictionary containing each of the options to be presented with the enum value of the option as the key, and the value being a string with the text to display.</param>
 		/// <returns>The chosen option - a value of the enum type passed in.</returns>
-		/// <exception cref="ArgumentException">If there are no values in the enum, or if the number of values in the enum does not match the size of the enumTextLookup dictionary.</exception>
+		/// <exception cref="ArgumentException">If there are no values in the dictionary.</exception>
 		/// <exception cref="NotImplementedException">Enums with more than 9 values are not handled.</exception>
-		public TEnum MenuFromEnum<TEnum>(Dictionary<TEnum, string> enumTextLookup) where TEnum : struct, Enum
+		public TEnum Menu<TEnum>(Dictionary<TEnum, string> menuOptions) where TEnum : struct, Enum
 		{
-			TEnum[] values = Enum.GetValues<TEnum>().ToArray();
+			window.Clear();
 
-			if (values.Length < 1)
+			if (menuOptions.Count < 1)
 			{
-				throw new ArgumentException($"Enum {typeof(TEnum).Name} does not have any values.");
+				throw new ArgumentException($"menuOptions does not have any values.");
 			}
 
-			if (values.Length > 9)
+			if (menuOptions.Count > 9)
 			{
-				throw new NotImplementedException($"Enum {typeof(TEnum).Name} has more than 9 values - this method only supports options from `1` to `9`. It could easily be expanded to offer alphabetic options as well.");
-			}
-
-			if (values.Length != enumTextLookup.Count)
-			{
-				throw new ArgumentException($"The enumTextLookup dictionary does not contain the same number of entries as there are values in the {typeof(TEnum).Name} enum");
+				throw new NotImplementedException($"menuOptions has more than 9 values - this method only supports options from `1` to `9`. It could easily be expanded to offer alphabetic options as well.");
 			}
 
 			// The number of pixels that menu item Text elements are positioned from the left.
@@ -374,10 +368,10 @@ namespace SimpleSnake
 			// Create an array of Text objects to display the options
 			var optionText = new List<Text>();
 			int optionNum = 1;
-			foreach (TEnum option in values)
+			foreach (KeyValuePair<TEnum, string> option in menuOptions)
 			{
 				// Create the text object
-				var text = new Text($"{(char)(optionNum + '0')}. {enumTextLookup[option]}", font, textSize)
+				var text = new Text($"{(char)(optionNum + '0')}. {option.Value}", font, textSize)
 				{
 					// Set the position of the text
 					Position = new Vector2f(textPosLeft, textPosTop * optionNum),
@@ -388,7 +382,7 @@ namespace SimpleSnake
 				optionText.Add(text);
 
 				// populate the options dictionary at the same time
-				options[optionNum] = option;
+				options[optionNum] = option.Key;
 
 				optionNum++;
 			}

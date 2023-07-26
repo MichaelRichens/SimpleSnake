@@ -26,13 +26,13 @@ namespace SimpleSnake
 		public void InitBoard(int width, int height, GameResults gameResults);
 
 		/// <summary>
-		/// Method for displaying a menu to the player, and getting a choice from all the options in the enum type parameter that is passed.  Display text for the options is passed in as a dictionary.
+		/// Method for displaying a menu to the player, and getting a choice from all the options in the passed dictionary.  The dictionary is keyed with an enum, the type of which is passed as a stype parameter.
 		/// </summary>
-		/// <typeparam name="TEnum">The enum representing the options to be presented to the player.</typeparam>
-		/// <param name="enumTextLookup">A dictionary containing each of these options as a key, with the value being a string with the text to display.</param>
+		/// <typeparam name="TEnum">The enum class used for the options to be presented to the player.</typeparam>
+		/// <param name="menuOptions">A dictionary containing each of the options to be presented with the enum value of the option as the key, and the value being a string with the text to display.</param>
 		/// <returns>The chosen option - a value of the enum type passed in.</returns>
-		/// <exception cref="ArgumentException">If there are no values in the enum, or if the number of values in the enum does not match the size of the enumTextLookup dictionary.</exception>
-		public TEnum MenuFromEnum<TEnum>(Dictionary<TEnum, string> enumTextLookup) where TEnum : struct, Enum;
+		/// <exception cref="ArgumentException">If there are no values in the dictionary.</exception>
+		public TEnum Menu<TEnum>(Dictionary<TEnum, string> menuOptions) where TEnum : struct, Enum;
 
 		/// <summary>
 		/// Pauses the game until suitable unpause action is made.  Returns a boolean to say whether the unpasue should also be treated as a game exit.

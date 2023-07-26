@@ -22,7 +22,7 @@ namespace SimpleSnake
 		internal static string GameBoardHeading(Keyboard.Key pauseKey, Keyboard.Key quitKey) => $"Press {pauseKey} to pause, press {quitKey} to quit.";
 
 		/// <summary>
-		/// A lookup to provide the text to display for each memeber of the MainMenuOption enum.
+		/// The options to display in the main game menu.  
 		/// </summary>
 		internal static Dictionary<MainMenuOption, string> MainMenu = new() {
 			{ MainMenuOption.Play, "Start Game" },
