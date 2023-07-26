@@ -48,14 +48,16 @@ namespace SimpleSnake
 		/// <param name="width">The width of the game board in cells.</param>
 		/// <param name="height">The height of the game board in cells.</param>
 		/// <param name="delay">The delay between game updates in ms.</param>
+		/// <param name="sessionHighScore">The highest score achieved this session</param>
+		/// <param name="allTimeHighScore">The highest score achieved in any session.</param>
 		/// <param name="graphicsMode">Provide an IGraphicsMode implementor to display the graphics.</param>
-		internal SnakeGame(int width, int height, int startingLength, Direction startingDirection, int delay, long sessionHighScore, IGraphicsMode graphicsMode)
+		internal SnakeGame(int width, int height, int startingLength, Direction startingDirection, int delay, long sessionHighScore, long allTimeHighScore, IGraphicsMode graphicsMode)
 		{
 			this.graphicsMode = graphicsMode;
 
 			Delay = delay;
 
-			GameResults = new GameResults(sessionHighScore);
+			GameResults = new GameResults(sessionHighScore, allTimeHighScore);
 
 			snake = new Snake(startingLength, startingDirection, width / 2, height / 2);
 

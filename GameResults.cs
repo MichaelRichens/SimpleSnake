@@ -27,11 +27,19 @@ namespace SimpleSnake
 		public long SessionHighScore { get; }
 
 		/// <summary>
+		/// Gets the highest score achieved and saved on this system.
+		/// </summary>
+		public long AllTimeHighScore { get; }
+
+		/// <summary>
 		/// Constructs a new instance of game result.
 		/// </summary>
-		public GameResults(long sessionHighScore)
+		/// <param name="sessionHighScore">The highest score achieved this session</param>
+		/// <param name="allTimeHighScore">The highest score achieved in any session.</param>
+		public GameResults(long sessionHighScore, long allTimeHighScore)
 		{
 			SessionHighScore = sessionHighScore;
+			AllTimeHighScore = allTimeHighScore;
 		}
 
 		/// <summary>

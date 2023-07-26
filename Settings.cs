@@ -43,5 +43,12 @@ namespace SimpleSnake
 
 		// How much to multiply the reciprocal of the delay by to get the score awarded each tick.
 		internal static readonly int scoreMultipler = 100;
+
+		// Filename and path for saving app data
+		internal static readonly string userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SimpleSnake");
+		internal static readonly string userDataFilename = "dat.json";
+
+		// dat.json properties
+		internal static readonly string jsonHighScore = "highScore";
 	}
 }

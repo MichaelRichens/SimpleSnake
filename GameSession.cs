@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace SimpleSnake
 {
@@ -21,13 +23,32 @@ namespace SimpleSnake
 		/// </summary>
 		private long sessionHighScore = 0;
 
+		private long allTimeHighScoreBackingField = 0;
+
+		private long AllTimeHighScore
+		{
+			get => allTimeHighScoreBackingField;
+			set
+			{
+				allTimeHighScoreBackingField = value;
+
+				// Save the new high score to disk.
+				// This is a synchronous file write - don't want to do it async since we allow Environmnet.Exit in response to an event when running in windowed mode, so want to complete the write before checking for new events.
+				SaveHighScoreToFile(value);
+			}
+		}
+
 		/// <summary>
 		/// Creates a new instance of the game session, configured with the desired GraphicsMode.
 		/// </summary>
 		/// <param name="graphicsMode">The graphics mode to use fo the game session.</param>
-		internal GameSession(IGraphicsMode graphicsMode)
+		/// <param name="allTimeHighScore">The all time high score - should be read from disk and passed in.</param>
+		internal GameSession(IGraphicsMode graphicsMode, long allTimeHighScore)
 		{
 			this.graphicsMode = graphicsMode;
+
+			// Write directly to the backing field to avoid saving it to file 
+			allTimeHighScoreBackingField = allTimeHighScore;
 		}
 
 		/// <summary>
@@ -42,13 +63,22 @@ namespace SimpleSnake
 				choice = graphicsMode.MenuFromEnum<MainMenuOption>(TextStrings.MainMenu);
 				if (choice == MainMenuOption.Play)
 				{
-					var game = new SnakeGame(Settings.defaultWidth, Settings.defaultHeight, Settings.startingLength, Settings.startingDirection, Settings.defaultDelay, sessionHighScore, graphicsMode);
+					// Play a game.
+					var game = new SnakeGame(Settings.defaultWidth, Settings.defaultHeight, Settings.startingLength, Settings.startingDirection, Settings.defaultDelay, sessionHighScore, AllTimeHighScore, graphicsMode);
 					game.Play();
+
 					graphicsMode.PostPlayCleanup();
+
+					// Check if a new high score was set.
 
 					if (game.GameResults.Score > sessionHighScore)
 					{
 						sessionHighScore = game.GameResults.Score;
+					}
+
+					if (game.GameResults.Score > AllTimeHighScore)
+					{
+						AllTimeHighScore = game.GameResults.Score;
 					}
 				}
 			} while (choice != MainMenuOption.Quit);
@@ -56,5 +86,45 @@ namespace SimpleSnake
 			// Game session is over and the player has chosen to quit.
 			// There is the ability to quit the game via Environment.Exit(), so reaching this point is not guaranteed.
 		}
+
+		/// <summary>
+		/// Helper method which saves passed long to disk as the new high score.
+		/// This method blocks until file access is complete.
+		/// </summary>
+		/// <param name="score">The number to be saved as the high score.</param>
+		private static void SaveHighScoreToFile(long score)
+		{
+			try
+			{
+				string directoryPath = Settings.userDataPath;
+				string dataPath = Path.Combine(directoryPath, Settings.userDataFilename);
+
+				// Check if the directory exists, and if not, create it.
+				if (!Directory.Exists(directoryPath))
+				{
+					Directory.CreateDirectory(directoryPath);
+				}
+
+				JObject jsonObject;
+
+				// Check if the file exists, and if not, create it and initialise it with an empty JSON object.
+				if (!File.Exists(dataPath))
+				{
+					jsonObject = new JObject();
+				}
+				else
+				{
+					jsonObject = JObject.Parse(File.ReadAllText(dataPath));
+				}
+
+				jsonObject[Settings.jsonHighScore] = score;
+				File.WriteAllText(dataPath, jsonObject.ToString());
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Error saving high score: {ex.Message}");
+			}
+		}
+
 	}
 }
