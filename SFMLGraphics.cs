@@ -47,7 +47,7 @@ namespace SimpleSnake
 		/// <summary>
 		/// Stores the location in pixels in the window where the board cells should start being drawn.
 		/// </summary>
-		private readonly Vector2f boardDisplayOrigin;
+		private Vector2f boardDisplayOrigin;
 
 		/// <summary>
 		/// The font used for text output.
@@ -62,12 +62,17 @@ namespace SimpleSnake
 		/// <summary>
 		/// The font size in pixels of the score display text.
 		/// </summary>
-		private readonly uint fontSizeScore = 40;
+		private readonly uint fontSizeScore = 25;
 
 		/// <summary>
 		/// The title text to appear above the game board.
 		/// </summary>
-		private readonly Text gameBoardHeading;
+		private Text? gameBoardHeading;
+
+		/// <summary>
+		/// The high scores to be displayed - a collection of Text elements with present position that need to be displayed every game loop.
+		/// </summary>
+		private readonly List<Text> highScoreTitle = new();
 
 		/// <summary>
 		/// Random number generator.
@@ -77,7 +82,7 @@ namespace SimpleSnake
 		/// <summary>
 		/// The title text to appear to the left of the player's score.
 		/// </summary>
-		private readonly Text scoreTitle;
+		private Text? scoreTitle;
 
 		/// <summary>
 		/// The sprites available for each CellType.
@@ -104,21 +109,6 @@ namespace SimpleSnake
 			font = new Font("../../../fonts/MontserratMedium.ttf");
 
 			LoadSprites();
-
-			// Create and configure text elements that will be used by DrawBoard
-			gameBoardHeading = new Text(TextStrings.GameBoardHeading(Settings.pauseKey.sfml, Settings.quitKey.sfml), font, fontSizeTitle)
-			{
-				FillColor = Settings.textColour.sfml,
-				Position = new Vector2f(10, blankSpaceLineSize)
-			};
-
-			scoreTitle = new Text(TextStrings.scoreTitle, font, fontSizeScore)
-			{
-				FillColor = Settings.textColour.sfml,
-				Position = new Vector2f(blankSpaceLineSize, gameBoardHeading.Position.Y + fontSizeTitle + blankSpaceLineSize)
-			};
-
-			boardDisplayOrigin = new Vector2f(blankSpaceLineSize, scoreTitle.Position.Y + fontSizeScore + blankSpaceLineSize);
 
 			window.Clear(Settings.backgroundColour.sfml);
 
@@ -182,6 +172,10 @@ namespace SimpleSnake
 
 			// Draw fixed title elements
 			window.Draw(gameBoardHeading);
+			foreach (Text highScoreElement in highScoreTitle)
+			{
+				window.Draw(highScoreElement);
+			}
 			window.Draw(scoreTitle);
 
 			// Create and draw score
@@ -250,16 +244,79 @@ namespace SimpleSnake
 		/// <param name="height">The height of the board in cells.</param>
 		public void InitBoard(int width, int height, GameResults gameResults)
 		{
+			window.Clear(Settings.backgroundColour.sfml);
+
 			// check window is large enough to fit game board, and expand it if not
-			// Let's say we want 200px in each dimension larger than it takes to display the board.
 			Vector2u oldWinSize = window.Size;
 			uint minX = (uint)width * (uint)cellSize + 200;
 			uint minY = (uint)height * (uint)cellSize + 200;
 			if (minX > oldWinSize.X || minY > oldWinSize.Y)
 			{
-				Vector2u newWinSize = new(minX > oldWinSize.X ? minX : oldWinSize.X, minY > oldWinSize.Y ? minY : oldWinSize.Y);
+				uint x = minX > oldWinSize.X ? minX : oldWinSize.X;
+				uint y = minY > oldWinSize.Y ? minY : oldWinSize.Y;
+				Vector2u newWinSize = new(x, y);
 				window.Size = newWinSize;
+
+				View adjustedView = new(new FloatRect(0, 0, window.Size.X, window.Size.Y));
+				window.SetView(adjustedView);
 			}
+
+			// Create and configure text elements that will be used by DrawBoard
+
+			// The game heading
+			gameBoardHeading = new Text(TextStrings.GameBoardHeading(Settings.pauseKey.sfml, Settings.quitKey.sfml), font, fontSizeTitle)
+			{
+				FillColor = Settings.textColour.sfml,
+				Position = new Vector2f(10, blankSpaceLineSize)
+			};
+
+			// High scores
+			// Multiple elements which are created and positioned here and stored in a List, for drawing each iteration.
+
+			// The list is a class field, so needs to be cleared first since it survivies between games.
+			highScoreTitle.Clear();
+
+			// Display all high score elements on the same line
+			float highScoreY = gameBoardHeading.Position.Y + fontSizeTitle + blankSpaceLineSize;
+
+			// X position depends on the position of the previous element in the list - helper function to calculate.
+			float lastHighScoreX() => highScoreTitle[^1].Position.X + highScoreTitle[^1].GetGlobalBounds().Width;
+
+			// Populate the list
+			highScoreTitle.Add(new Text(TextStrings.highSoreSessionTitle, font, fontSizeScore)
+			{
+				FillColor = Settings.textColour.sfml,
+				Position = new Vector2f(blankSpaceLineSize, highScoreY)
+			}
+			);
+			highScoreTitle.Add(new Text(gameResults.SessionHighScore.ToString("N0"), font, fontSizeScore)
+			{
+				FillColor = Settings.scoreColour.sfml,
+				Position = new Vector2f(lastHighScoreX() + blankSpaceLineSize, highScoreY)
+			}
+			);
+			highScoreTitle.Add(new Text(TextStrings.highSoreAllTimeTitle, font, fontSizeScore)
+			{
+				FillColor = Settings.textColour.sfml,
+				Position = new Vector2f(lastHighScoreX() + 2 * blankSpaceLineSize, highScoreY)
+			}
+			);
+			highScoreTitle.Add(new Text(gameResults.AllTimeHighScore.ToString("N0"), font, fontSizeScore)
+			{
+				FillColor = Settings.scoreColour.sfml,
+				Position = new Vector2f(lastHighScoreX() + blankSpaceLineSize, highScoreY)
+			}
+			);
+
+			// Below high scores is the current score - the actual score is rendered each iteration, but this is its title text.
+			scoreTitle = new Text(TextStrings.scoreTitle, font, fontSizeScore)
+			{
+				FillColor = Settings.textColour.sfml,
+				Position = new Vector2f(blankSpaceLineSize, highScoreTitle[^1].Position.Y + fontSizeScore + blankSpaceLineSize)
+			};
+
+			// Use the last title element to calculate the start position for drawing the board.
+			boardDisplayOrigin = new Vector2f(blankSpaceLineSize, scoreTitle.Position.Y + fontSizeScore + blankSpaceLineSize);
 
 			// Dimension the cellSpriteIndex array
 			cellSpriteIndex = new CellSpriteIndex[height, width];
@@ -272,7 +329,7 @@ namespace SimpleSnake
 				}
 			}
 
-			// Add handlers
+			// Add window handlers
 			window.KeyPressed += InGameKeypressHandler;
 		}
 

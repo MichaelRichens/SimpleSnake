@@ -199,10 +199,19 @@ namespace SimpleSnake
 
 			// Clear screan and write header text.
 			Console.Clear();
+
+			Console.ForegroundColor = Settings.textColour.console;
 			Console.WriteLine(TextStrings.GameBoardHeading(Settings.pauseKey.console, Settings.quitKey.console));
+
 			Console.Write(TextStrings.highSoreSessionTitle);
 			Console.ForegroundColor = Settings.scoreColour.console;
-			Console.WriteLine(gameResults.SessionHighScore.ToString("N0"));
+			Console.Write(gameResults.SessionHighScore.ToString("N0"));
+			Console.Write("   ");
+			Console.ForegroundColor = Settings.textColour.console;
+			Console.Write(TextStrings.highSoreAllTimeTitle);
+			Console.ForegroundColor = Settings.scoreColour.console;
+			Console.WriteLine(gameResults.AllTimeHighScore.ToString("N0"));
+
 			Console.WriteLine();
 
 			// Store where the cursor is so that the game can be drawn below it (and to the right of it if we want a side menu).

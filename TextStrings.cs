@@ -29,7 +29,8 @@ namespace SimpleSnake
 			{ MainMenuOption.Quit, "Exit Game" },
 		};
 
-		internal static string highSoreSessionTitle = "High Score (Session): ";
 		internal static string scoreTitle = "Score: ";
+		internal static string highSoreSessionTitle = "High Score (Session): ";
+		internal static string highSoreAllTimeTitle = "High Score (All Time): ";
 	}
 }
