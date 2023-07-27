@@ -26,7 +26,17 @@ namespace SimpleSnake
 		/// </summary>
 		internal static Dictionary<MainMenuOption, string> MainMenu = new() {
 			{ MainMenuOption.Play, "Start Game" },
+			{ MainMenuOption.Options, "Options" },
 			{ MainMenuOption.Quit, "Exit Game" },
+		};
+
+		/// <summary>
+		/// The options to display in the options menu.
+		/// </summary>
+		internal static Dictionary<OptionsMenuOption, string> OptionsMenu = new()
+		{
+			{ OptionsMenuOption.ChangeBoardSize, "Adjust Map Size" },
+			{ OptionsMenuOption.Back, "Back" },
 		};
 
 		internal static string scoreTitle = "Score: ";

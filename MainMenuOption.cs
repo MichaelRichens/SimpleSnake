@@ -12,6 +12,7 @@ namespace SimpleSnake
 	public enum MainMenuOption
 	{
 		Play,
+		Options,
 		Quit,
 	}
 }

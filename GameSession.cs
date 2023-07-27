@@ -81,6 +81,11 @@ namespace SimpleSnake
 						AllTimeHighScore = game.GameResults.Score;
 					}
 				}
+				else if (choice == MainMenuOption.Options)
+				{
+					// Displays the options menu and applies any changes made.
+					ChangeOptions();
+				}
 			} while (choice != MainMenuOption.Quit);
 
 			// Game session is over and the player has chosen to quit.
@@ -126,5 +131,24 @@ namespace SimpleSnake
 			}
 		}
 
+		/// <summary>
+		/// Displays the options menu and applies any changes made.
+		/// </summary>
+		private void ChangeOptions()
+		{
+			OptionsMenuOption choice;
+			do
+			{
+				choice = graphicsMode.Menu<OptionsMenuOption>(TextStrings.OptionsMenu);
+
+				switch (choice)
+				{
+					case OptionsMenuOption.ChangeBoardSize:
+						{
+							break;
+						}
+				}
+			} while (choice != OptionsMenuOption.Back);
+		}
 	}
 }
