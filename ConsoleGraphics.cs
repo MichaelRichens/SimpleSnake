@@ -222,12 +222,12 @@ namespace SimpleSnake
 		/// <summary>
 		/// A utility function for displaying a keyboard driven Console menu to the player, and getting a choice from all the options in the passed dictionary.  The dictionary is keyed with an enum, the type of which is passed as a stype parameter.
 		/// </summary>
-		/// <typeparam name="TEnum">The enum class used for the options to be presented to the player.</typeparam>
+		/// <typeparam name="T">The type of the dictionary key and return value.</typeparam>
 		/// <param name="menuOptions">A dictionary containing each of the options to be presented with the enum value of the option as the key, and the value being a string with the text to display.</param>
-		/// <returns>The chosen option - a value of the enum type passed in.</returns>
+		/// <returns>The key of the chosen option in the menuOptions parameter.</returns>
 		/// <exception cref="ArgumentException">If there are no values in the dictionary.</exception>
 		/// <exception cref="NotImplementedException">Dictionaries with more than 9 values are not handled.</exception>
-		public TEnum Menu<TEnum>(Dictionary<TEnum, string> menuOptions) where TEnum : struct, Enum
+		public T Menu<T>(Dictionary<T, string> menuOptions) where T : notnull
 		{
 			Console.Clear();
 
@@ -242,11 +242,11 @@ namespace SimpleSnake
 			}
 
 			// Dictionary to store keypress assigned to choose menu option to that option.
-			Dictionary<char, TEnum> options = new();
+			Dictionary<char, T> options = new();
 
 			// Output menu, and populate the options dictionary.
 			char optionNum = '1';
-			foreach (KeyValuePair<TEnum, string> option in menuOptions)
+			foreach (KeyValuePair<T, string> option in menuOptions)
 			{
 				options[optionNum] = option.Key;
 				Console.WriteLine($"{optionNum}. {option.Value}");
