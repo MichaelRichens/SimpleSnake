@@ -34,7 +34,7 @@ namespace SimpleSnake
 
 				// Save the new high score to disk.
 				// This is a synchronous file write - don't want to do it async since we allow Environmnet.Exit in response to an event when running in windowed mode, so want to complete the write before checking for new events.
-				SaveHighScoreToFile(value);
+				SaveToDataFile(Settings.jsonHighScore, value);
 			}
 		}
 
@@ -93,11 +93,12 @@ namespace SimpleSnake
 		}
 
 		/// <summary>
-		/// Helper method which saves passed long to disk as the new high score.
+		/// Helper method which saves passed property and value to the game's data file.  The data must be a valid JSON value.
 		/// This method blocks until file access is complete.
 		/// </summary>
-		/// <param name="score">The number to be saved as the high score.</param>
-		private static void SaveHighScoreToFile(long score)
+		/// <param name="key">The key to save the data under.</param></param>
+		/// <param name="value">The data value to be saved.</param>
+		private static void SaveToDataFile(string key, JToken value)
 		{
 			try
 			{
@@ -122,7 +123,7 @@ namespace SimpleSnake
 					jsonObject = JObject.Parse(File.ReadAllText(dataPath));
 				}
 
-				jsonObject[Settings.jsonHighScore] = score;
+				jsonObject[key] = value;
 				File.WriteAllText(dataPath, jsonObject.ToString());
 			}
 			catch (Exception ex)
@@ -145,6 +146,7 @@ namespace SimpleSnake
 				{
 					case OptionsMenuOption.ChangeBoardSize:
 						{
+
 							break;
 						}
 				}
