@@ -32,8 +32,7 @@ namespace SimpleSnake
 			{
 				allTimeHighScoreBackingField = value;
 
-				// Save the new high score to disk.
-				// This is a synchronous file write - don't want to do it async since we allow Environmnet.Exit in response to an event when running in windowed mode, so want to complete the write before checking for new events.
+				// Save the new high score to disk.				
 				SaveToDataFile(Settings.jsonHighScore, value);
 			}
 		}
@@ -92,13 +91,7 @@ namespace SimpleSnake
 			// There is the ability to quit the game via Environment.Exit(), so reaching this point is not guaranteed.
 		}
 
-		/// <summary>
-		/// Helper method which saves passed property and value to the game's data file.  The data must be a valid JSON value.
-		/// This method blocks until file access is complete.
-		/// </summary>
-		/// <param name="key">The key to save the data under.</param></param>
-		/// <param name="value">The data value to be saved.</param>
-		private static void SaveToDataFile(string key, JToken value)
+		private static void SaveToDataFile(Dictionary<string, JToken> data)
 		{
 			try
 			{
@@ -123,13 +116,27 @@ namespace SimpleSnake
 					jsonObject = JObject.Parse(File.ReadAllText(dataPath));
 				}
 
-				jsonObject[key] = value;
+				foreach (var kvp in data)
+				{
+					jsonObject[kvp.Key] = kvp.Value;
+				}
+
 				File.WriteAllText(dataPath, jsonObject.ToString());
 			}
 			catch (Exception ex)
-			{
-				Console.WriteLine($"Error saving high score: {ex.Message}");
-			}
+			{ }
+		}
+
+		/// <summary>
+		/// Helper method which saves passed property and value to the game's data file.
+		/// This method blocks until file access is complete.
+		/// </summary>
+		/// <param name="key">The key to save the data under.</param>
+		/// <param name="value">The data value to be saved (JToken has many implicit conversions defined).</param>
+		// This is a synchronous file write - don't want to do it async since we allow Environmnet.Exit in response to an event when running in windowed mode, so want to complete the write before checking for new events.
+		private static void SaveToDataFile(string key, JToken value)
+		{
+			SaveToDataFile(new Dictionary<string, JToken> { { key, value } });
 		}
 
 		/// <summary>
